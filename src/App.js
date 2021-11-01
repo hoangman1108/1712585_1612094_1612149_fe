@@ -6,6 +6,7 @@ import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import AddClassModel from './components/AddClassModel';
 import './App.css';
 import DeleteClassModel from './components/DeleteClassModel';
+import ModelShow from './components/ModelShow';
 const API_URL = process.env.REACT_APP_BACKEND_URL;
 
 
@@ -14,6 +15,7 @@ function App() {
   const [showDeleteModel, setShowDeleteModel] = useState(false);
   const [data, setData] = useState([]);
   const [id, setId] = useState('');
+  const [msgError, setMsgError] = useState('');
   const handleCloseAddModel = () => setShowAddModel(false);
   const handleShowAddModel = () => setShowAddModel(true);
   const handleCloseDeleteModel = () => setShowDeleteModel(false);
@@ -43,18 +45,21 @@ function App() {
     fetch(`${API_URL}/classes`, requestOptions)
       .then(response => response.json())
       .then(result => {
-        console.log(result, 'result');
-        setData([...data, result]);
+        if (result.message) {
+          setMsgError(result.message);
+        } else {
+          setData([...data, result]);
+        }
       });
-    
+
   }
 
-  const deleteData = ()=>{
-    fetch(`${API_URL}/classes/${id}`, {method: 'DELETE'})
+  const deleteData = () => {
+    fetch(`${API_URL}/classes/${id}`, { method: 'DELETE' })
       .then(response => response.json())
       .then((result) => {
-        if(result.deletedCount){
-          const newData = data.filter((element)=>element._id !== id);
+        if (result.deletedCount) {
+          const newData = data.filter((element) => element._id !== id);
           setData(newData);
         }
       });
@@ -79,8 +84,9 @@ function App() {
       <Row>
         {listClass()}
       </Row>
-      <AddClassModel createData={createData} handleClose={handleCloseAddModel} show={showAddModel} />
+      <AddClassModel msgError={msgError} createData={createData} handleClose={handleCloseAddModel} show={showAddModel} />
       <DeleteClassModel deleteData={deleteData} handleClose={handleCloseDeleteModel} show={showDeleteModel} />
+      {msgError && (<ModelShow message={msgError}/>)}
     </Container>
   );
 }

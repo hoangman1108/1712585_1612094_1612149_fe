@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Formik } from 'formik';
 
-export default function AddClassModel({ show, handleClose, createData }) {
+export default function AddClassModel({ show, handleClose, createData, msgError }) {
   return (
     <Modal
       show={show}
@@ -54,7 +54,7 @@ export default function AddClassModel({ show, handleClose, createData }) {
                   value={values.name}
                   placeholder="10A3" />
                 <Form.Text className="text-error">
-                  {errors.name && touched.name && errors.name}
+                  {(errors.name && touched.name && errors.name) || msgError}
                 </Form.Text>
               </Form.Group>
               <Form.Group className="mb-3">
