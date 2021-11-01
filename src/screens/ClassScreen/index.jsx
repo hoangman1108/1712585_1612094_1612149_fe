@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Container, Button, Row, Col } from 'react-bootstrap';
-import CardClass from './components/CardClass';
+
+import CardClass from '../../components/CardClass';
+import AddClassModel from '../../components/AddClassModel';
+import DeleteClassModel from '../../components/DeleteClassModel';
+import ModelShow from '../../components/ModelShow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import AddClassModel from './components/AddClassModel';
-import './App.css';
-import DeleteClassModel from './components/DeleteClassModel';
-import ModelShow from './components/ModelShow';
-const API_URL = process.env.REACT_APP_BACKEND_URL;
+import { API_URL } from '../../utils/const';
 
 
-function App() {
+function ClassScreen() {
   const [showAddModel, setShowAddModel] = useState(false);
   const [showDeleteModel, setShowDeleteModel] = useState(false);
   const [data, setData] = useState([]);
@@ -91,4 +91,4 @@ function App() {
   );
 }
 
-export default App;
+export default ClassScreen;
