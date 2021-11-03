@@ -1,9 +1,9 @@
-.card-class{
+.card-class {
   margin-top: 5px;
   width: 400px;
 }
 
-.card-class .title{
+.card-class .title {
   border: 1px solid rgb(57, 57, 57) !important;
   padding: 5px;
 }
@@ -12,7 +12,13 @@
   margin-top: 20px;
 }
 
-.text-error{
-  color: #ef2146!important;
+.text-error {
+  color: #ef2146 !important;
   font-size: 12px !important;
+}
+
+input:focus {
+  outline: none !important;
+  /* border: 1px solid red !important; */
+  box-shadow: 0 0 5px #0c5c37 !important;
 }

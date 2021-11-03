@@ -1,8 +1,10 @@
 import React from "react";
-import { Router, Switch, Route, Redirect } from "react-router-dom";
+import { Router, Switch, Route } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import HomeScreen from "./screens/HomeScreen";
 import ClassScreen from "./screens/ClassScreen";
+import LoginScreen from "./screens/LoginScreen";
+import RegisterScreen from "./screens/RegisterScreen";
 import "./App.css";
 
 const history = createBrowserHistory();
@@ -10,11 +12,19 @@ const history = createBrowserHistory();
 function App() {
   const routes = [
     {
-      path: `/classes`,
+      path: '/auth/login',
+      component: () => <LoginScreen />,
+    },
+    {
+      path: '/auth/register',
+      component: () => <RegisterScreen />,
+    },
+    {
+      path: '/classes',
       component: () => <ClassScreen />,
     },
     {
-      path: `/`,
+      path: '/',
       component: () => <HomeScreen />,
     },
   ];
