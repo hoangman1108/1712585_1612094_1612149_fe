@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Container, Button, Row, Col } from 'react-bootstrap';
 
-import CardClass from '../../components/CardClass';
-import AddClassModel from '../../components/AddClassModel';
-import DeleteClassModel from '../../components/DeleteClassModel';
-import ModelShow from '../../components/ModelShow';
+import CardClass from './components/CardClass';
+import AddClassModel from './components/AddClassModel';
+import DeleteClassModel from './components/DeleteClassModel';
+import ModelShow from './components/ModelShow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '../../utils/const';

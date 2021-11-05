@@ -69,8 +69,6 @@ export const login = (username, password) => dispatch => {
   )
 }
 export const logout = () => (dispatch) => {
-  authService.logout();
-
   dispatch({
     type: LOGOUT,
   });

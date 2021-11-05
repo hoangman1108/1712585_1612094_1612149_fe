@@ -22,3 +22,31 @@ input:focus {
   /* border: 1px solid red !important; */
   box-shadow: 0 0 5px #0c5c37 !important;
 }
+
+
+.custom-nav-link{
+  font-size: 14px !important;
+  font-weight: bold !important;
+  /* text-transform: uppercase !important; */
+  padding: 10px !important;
+  border-radius: 0 !important;
+}
+
+.color-iCoin{
+  color: #00b661;
+}
+
+/* override */
+.offcanvas-body{
+  padding: 0 !important;
+}
+
+.bg-navbar{
+  margin: 2px 0 !important;
+  background: #2a212140 !important;
+}
+
+.bg-navbar:hover {
+  margin: 2px 0 !important;
+  background: #3c3a3a40 !important;
+}

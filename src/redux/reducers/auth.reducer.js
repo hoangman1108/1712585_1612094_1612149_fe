@@ -29,7 +29,7 @@ export default function authReducer(state = initialState, action) {
       return {
         ...state,
         isLoggedIn: true,
-        user: payload,
+        user: payload.accessToken,
       };
     case LOGIN_FAIL:
       return {

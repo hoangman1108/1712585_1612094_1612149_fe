@@ -1,16 +1,24 @@
 import React from "react";
-import { Router, Switch, Route } from "react-router-dom";
-import { createBrowserHistory } from "history";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+// import { createBrowserHistory } from "history";
 import HomeScreen from "./screens/HomeScreen";
 import ClassScreen from "./screens/ClassScreen";
 import LoginScreen from "./screens/LoginScreen";
 import RegisterScreen from "./screens/RegisterScreen";
 import "./App.css";
-
-const history = createBrowserHistory();
+import Header from "./components/Header";
+import Management from "./screens/Management";
+import NotFoundScreen from "./screens/NotFoundScreen";
+import PrivateRoute from './components/PrivateRouter';
+import PublicRoute from './components/PublicRouter';
+import { useSelector } from "react-redux";
+// const history = createBrowserHistory();
 
 function App() {
-  const routes = [
+
+  const { isLoggedIn } = useSelector(state => state.auth);
+
+  const publicRoutes = [
     {
       path: '/auth/login',
       component: () => <LoginScreen />,
@@ -20,26 +28,45 @@ function App() {
       component: () => <RegisterScreen />,
     },
     {
-      path: '/classes',
-      component: () => <ClassScreen />,
-    },
-    {
       path: '/',
       component: () => <HomeScreen />,
     },
   ];
 
+  const privateRoutes = [
+    {
+      path: '/classes',
+      component: () => <ClassScreen />,
+    },
+    {
+      path: '/management',
+      component: () => <Management />,
+    },
+  ]
+
   return (
-    <Router basename={process.env.REACT_APP_PUBLIC_URL} history={history}>
-      <Switch>
-        {/* <Route exact path={"/"}>
-          <Redirect to={`/`} />
-        </Route> */}
-        {routes.map((item) => (
-          <Route key={item.path} path={item.path} children={item.component} />
-        ))}
-      </Switch>
-    </Router>
+    <>
+      <Router>
+        <Header />
+        <Switch>
+          {publicRoutes.map((item) => (
+            <PublicRoute
+              exact
+              key={item.path}
+              path={item.path}
+              component={item.component} />
+          ))}
+          {privateRoutes.map((item) => (
+            <PrivateRoute
+              isAuthenticated={isLoggedIn}
+              exact
+              key={item.path}
+              path={item.path}
+              component={item.component} />
+          ))}
+        </Switch>
+      </Router>
+    </>
   );
 }
 
