@@ -8,7 +8,8 @@ import ModelShow from './components/ModelShow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { API_URL } from '../../utils/const';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { createClass, getListClass } from '../../redux/actions/class.action';
 
 function ClassScreen() {
   const [showAddModel, setShowAddModel] = useState(false);
@@ -19,74 +20,75 @@ function ClassScreen() {
   const handleCloseAddModel = () => setShowAddModel(false);
   const handleShowAddModel = () => setShowAddModel(true);
   const handleCloseDeleteModel = () => setShowDeleteModel(false);
+  const dispatch = useDispatch();
+
+  const { classes } = useSelector(state => state.class)
+  const { role } = useSelector(state => state.auth)
   const handleShowDeleteModel = (id) => {
     setId(id);
     setShowDeleteModel(true);
   };
 
   useEffect(() => {
-    fetch(`${API_URL}/classes`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw response;
-      }).then(data => {
-        setData(data);
-      });
+    dispatch(getListClass());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
   const createData = (value) => {
-    const requestOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(value)
-    };
-    fetch(`${API_URL}/classes`, requestOptions)
-      .then(response => response.json())
-      .then(result => {
-        if (result.message) {
-          setMsgError(result.message);
-        } else {
-          setData([...data, result]);
-        }
-      });
+    // const requestOptions = {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify(value)
+    // };
+    // fetch(`${API_URL}/classes`, requestOptions)
+    //   .then(response => response.json())
+    //   .then(result => {
+    //     if (result.message) {
+    //       setMsgError(result.message);
+    //     } else {
+    //       setData([...data, result]);
+    //     }
+    //   });
+
+    dispatch(createClass(value));
 
   }
 
   const deleteData = () => {
-    fetch(`${API_URL}/classes/${id}`, { method: 'DELETE' })
-      .then(response => response.json())
-      .then((result) => {
-        if (result.deletedCount) {
-          const newData = data.filter((element) => element._id !== id);
-          setData(newData);
-        }
-      });
+    // fetch(`${API_URL}/classes/${id}`, { method: 'DELETE' })
+    //   .then(response => response.json())
+    //   .then((result) => {
+    //     if (result.deletedCount) {
+    //       const newData = data.filter((element) => element._id !== id);
+    //       setData(newData);
+    //     }
+    //   });
+    dispatch(createClass(id));
   }
 
   const listClass = () => {
-    return data.map((element) => {
-      return (<Col>
-        <CardClass deleteData={deleteData} info={element} showDelete={handleShowDeleteModel} />
+    return classes.map((element, index) => {
+      return (<Col key={index}>
+        <CardClass role={role} deleteData={deleteData} info={element} showDelete={handleShowDeleteModel} />
       </Col>)
     })
   }
 
   return (
     <Container>
-      <Button variant="outline-success"
-        onClick={handleShowAddModel}
-        className="mt-5">
-        <FontAwesomeIcon icon={faPlusCircle} />{' '}
-        Thêm Lớp
-      </Button>
+      {
+        role === 'teacher' && (<Button variant="outline-success"
+          onClick={handleShowAddModel}
+          className="mt-5">
+          <FontAwesomeIcon icon={faPlusCircle} />{' '}
+          Thêm Lớp
+        </Button>)
+      }
       <Row>
         {listClass()}
       </Row>
       <AddClassModel msgError={msgError} createData={createData} handleClose={handleCloseAddModel} show={showAddModel} />
       <DeleteClassModel deleteData={deleteData} handleClose={handleCloseDeleteModel} show={showDeleteModel} />
-      {msgError && (<ModelShow message={msgError}/>)}
+      {msgError && (<ModelShow message={msgError} />)}
     </Container>
   );
 }

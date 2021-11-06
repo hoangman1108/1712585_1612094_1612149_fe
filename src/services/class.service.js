@@ -3,13 +3,23 @@ import authHeader from "./auth-header";
 import { API_URL } from "../utils/const";
 
 
-const getAll = () => {
+const getAllClass = () => {
+  console.log(authHeader(), 'authHeader()');
   return axios.get(API_URL + "/classes", { headers: authHeader() });
 };
 
+const createClass = (data) => {
+  return axios.post(API_URL + "/classes", data, { headers: authHeader() });
+}
+
+const deleteClass = (id) => {
+  return axios.delete(API_URL + `/classes/${id}`, { headers: authHeader() });
+}
 
 const classService = {
-  getAll
+  getAllClass,
+  deleteClass,
+  createClass,
 };
 
 export default classService;

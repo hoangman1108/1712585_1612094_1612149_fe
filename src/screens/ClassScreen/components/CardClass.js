@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, Col, Row, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-export default function CardClass({ showDelete, info }) {
+export default function CardClass({ showDelete, info, role }) {
   return (
     <Card className="card-class" key={info._id}>
       <Card.Body>
@@ -16,13 +16,15 @@ export default function CardClass({ showDelete, info }) {
             </Col>
             <Col sm={2}>
 
-              <Button variant="outline-danger"
-                onClick={()=>{
-                  showDelete(info._id);
-                }}
-              >
-                <FontAwesomeIcon icon={faTrashAlt} />
-              </Button>
+              {
+                role === 'teacher' && (<Button variant="outline-danger"
+                  onClick={() => {
+                    showDelete(info._id);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faTrashAlt} />
+                </Button>)
+              }
             </Col>
           </Row>
         </Card.Text>

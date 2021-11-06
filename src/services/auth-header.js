@@ -1,12 +1,11 @@
+import { getLocalStorage } from "../helpers/localStorage";
+
 export default function authHeader() {
-  const user = JSON.parse(localStorage.getItem("user"));
-
-  if (user && user.accessToken) {
-    // For Spring Boot back-end
-    // return { Authorization: "Bearer " + user.accessToken };
-
-    // for Node.js Express back-end
-    return { "x-access-token": user.accessToken };
+  const { auth } = getLocalStorage('persist:root');
+  console.log(JSON.parse(auth));
+  const token = JSON.parse(auth).user;
+  if (auth && token) {
+    return { "authorization": 'Bearer ' + token };
   } else {
     return {};
   }

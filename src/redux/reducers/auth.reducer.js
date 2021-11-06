@@ -13,7 +13,6 @@ const initialState = {
 
 export default function authReducer(state = initialState, action) {
   const { type, payload } = action;
-
   switch (type) {
     case REGISTER_SUCCESS:
       return {
@@ -30,6 +29,7 @@ export default function authReducer(state = initialState, action) {
         ...state,
         isLoggedIn: true,
         user: payload.accessToken,
+        role: payload.role,
       };
     case LOGIN_FAIL:
       return {
