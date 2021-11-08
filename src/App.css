@@ -59,11 +59,36 @@ input:focus {
   color: #00b661;
 }
 
-.pagination-custom button{
+.pagination-custom button {
   font-size: 12px;
   border: 0px;
   padding: 5px 12px;
 }
-.pagination-custom select{
+.pagination-custom select {
   width: 100px;
 }
+
+.bg-non-active {
+  background-color: #115334;
+}
+
+.accordion-item {
+  border: 0px !important;
+}
+
+.accordion-header {
+  border-bottom: 0.5px solid #5c5c5c61;
+}
+
+.accordion-button:not(.collapsed) {
+  color: #000000 !important;
+  background-color: #7ef7bf46 !important;
+}
+
+.accordion-button::after {
+  /* display: none; */
+}
+
+/* .accordion-header button:hover ~ .accordion-button::after {
+  display: block;
+} */

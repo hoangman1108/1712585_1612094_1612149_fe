@@ -14,6 +14,7 @@ import DetailClass from "./screens/DetailClass";
 import NotFoundScreen from "./screens/NotFoundScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "./redux/actions/auth.action";
+import AssignmentClass from "./screens/AssignmentClass";
 // const history = createBrowserHistory();
 
 function App() {
@@ -43,8 +44,12 @@ function App() {
 
   const privateRoutes = [
     {
-      path: '/classes/:id',
+      path: '/classes/:id/detail',
       component: () => <DetailClass />,
+    },
+    {
+      path: '/classes/:id/assignment',
+      component: () => <AssignmentClass />,
     },
     {
       path: '/classes',

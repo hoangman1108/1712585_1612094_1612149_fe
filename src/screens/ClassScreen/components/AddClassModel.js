@@ -1,12 +1,22 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import nProgress from "nprogress";
 import { Modal, Button, Form } from "react-bootstrap";
+import { useDispatch } from "react-redux";
 import { Formik } from 'formik';
-import { useSelector } from "react-redux";
+import userService from "../../../services/user.service";
+import { createClass } from "../../../redux/actions/class.action";
+export default function AddClassModel({ show, handleClose, msgError }) {
+  const [teachers, setTeachers] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    userService.getUserByRole('teacher')
+      .then(value => {
+        if (value.data) {
+          setTeachers(value.data)
+        }
+      })
+  }, [])
 
-export default function AddClassModel({ show, handleClose, createData, msgError }) {
-
-  const { classes } = useSelector(state => state.class)
-  const data = classes.filter(element => element.role === 'teacher');
   return (
     <Modal
       show={show}
@@ -15,7 +25,7 @@ export default function AddClassModel({ show, handleClose, createData, msgError 
       keyboard={false}
     >
       <Formik
-        initialValues={{ name: '', teacher: '', quantity: 0 }}
+        initialValues={{ name: '', teacher: undefined }}
         validate={values => {
           const errors = {};
           if (!values.name) {
@@ -24,15 +34,21 @@ export default function AddClassModel({ show, handleClose, createData, msgError 
           if (!values.teacher) {
             errors.teacher = 'Field teacher is required';
           }
-          if (values.quantity < 1) {
-            errors.quantity = 'Field quantity no less than 1';
-          }
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          createData(values);
-          setSubmitting(true);
-          handleClose();
+          nProgress.start();
+          const dataCreate = {
+            name: values.name,
+            teachers: [values.teacher],
+            codeJoin: "1234",
+          }
+          setTimeout(() => {
+            dispatch(createClass(dataCreate));
+            setSubmitting(true);
+            nProgress.done();
+            handleClose();
+          }, 500);
         }}
       >
         {({
@@ -63,18 +79,30 @@ export default function AddClassModel({ show, handleClose, createData, msgError 
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Tên GVCN</Form.Label>
-                <Form.Control type="text"
+                <Form.Select name="teacher"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.teacher}
+                  aria-label="Default select example"
+                  as="select"
+                >
+                  <option>Chọn giáo viên</option>
+                  {
+                    teachers.map((teacher, index) => (<option key={index} value={teacher.id}>{teacher.name}</option>))
+                  }
+                </Form.Select>
+                {/* <Form.Control type="text"
                   name="teacher"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.teacher}
-                  placeholder="Nguyễn Văn A" />
+                  placeholder="Nguyễn Văn A" /> */}
                 <Form.Text className="text-error">
                   {errors.teacher && touched.teacher && errors.teacher}
                 </Form.Text>
               </Form.Group>
 
-              <Form.Group className="mb-3">
+              {/* <Form.Group className="mb-3">
                 <Form.Label>Sĩ số</Form.Label>
                 <Form.Control type="number"
                   name="quantity"
@@ -85,7 +113,7 @@ export default function AddClassModel({ show, handleClose, createData, msgError 
                 <Form.Text className="text-error">
                   {errors.quantity && touched.quantity && errors.quantity}
                 </Form.Text>
-              </Form.Group>
+              </Form.Group> */}
 
             </Modal.Body>
             <Modal.Footer>

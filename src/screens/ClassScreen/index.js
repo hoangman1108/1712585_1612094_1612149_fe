@@ -31,43 +31,30 @@ function ClassScreen() {
     dispatch(getListClass());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const createData = (value) => {
-    // const requestOptions = {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(value)
-    // };
-    // fetch(`${API_URL}/classes`, requestOptions)
-    //   .then(response => response.json())
-    //   .then(result => {
-    //     if (result.message) {
-    //       setMsgError(result.message);
-    //     } else {
-    //       setData([...data, result]);
-    //     }
-    //   });
+  // const createData = (value) => {
+  //   // const requestOptions = {
+  //   //   method: 'POST',
+  //   //   headers: { 'Content-Type': 'application/json' },
+  //   //   body: JSON.stringify(value)
+  //   // };
+  //   // fetch(`${API_URL}/classes`, requestOptions)
+  //   //   .then(response => response.json())
+  //   //   .then(result => {
+  //   //     if (result.message) {
+  //   //       setMsgError(result.message);
+  //   //     } else {
+  //   //       setData([...data, result]);
+  //   //     }
+  //   //   });
 
-    dispatch(createClass(value));
+  //   dispatch(createClass(value));
 
-  }
-
-  const deleteData = () => {
-    // fetch(`${API_URL}/classes/${id}`, { method: 'DELETE' })
-    //   .then(response => response.json())
-    //   .then((result) => {
-    //     if (result.deletedCount) {
-    //       const newData = data.filter((element) => element._id !== id);
-    //       setData(newData);
-    //     }
-    //   });
-    dispatch(createClass(id));
-  }
+  // }
 
   const listClass = () => {
     return classes.map((element, index) => {
-      console.log(element, 'element');
-      return (<Col key={index}>
-        <CardClass role={role} deleteData={deleteData} info={element} showDelete={handleShowDeleteModel} />
+      return (<Col className="mt-3" xs={4} key={index}>
+        <CardClass info={element} showDelete={handleShowDeleteModel} />
       </Col>)
     })
   }
@@ -85,8 +72,8 @@ function ClassScreen() {
       <Row>
         {listClass()}
       </Row>
-      <AddClassModel msgError={msgError} createData={createData} handleClose={handleCloseAddModel} show={showAddModel} />
-      <DeleteClassModel deleteData={deleteData} handleClose={handleCloseDeleteModel} show={showDeleteModel} />
+      <AddClassModel msgError={msgError} handleClose={handleCloseAddModel} show={showAddModel} />
+      {/* <DeleteClassModel deleteData={deleteData} handleClose={handleCloseDeleteModel} show={showDeleteModel} /> */}
       {msgError && (<ModelShow message={msgError} />)}
     </Container>
   );

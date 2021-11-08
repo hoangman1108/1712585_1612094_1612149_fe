@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, Navbar, Nav, Offcanvas } from "react-bootstrap";
+import { Container, Navbar, Nav, Offcanvas, Row, Col } from "react-bootstrap";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -93,7 +93,7 @@ export default function Header() {
                 />
               </Nav.Link>
             </Nav>
-            
+
             {!isLoggedIn && (
               <Nav className="justify-content-end flex-grow-1 bg-navbar">
                 <Nav.Link

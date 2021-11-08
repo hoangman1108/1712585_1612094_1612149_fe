@@ -1,5 +1,6 @@
 import React from 'react'
 import { Container, Alert, Row, Col } from 'react-bootstrap'
+import TabsDetail from '../ClassScreen/components/TabsDetail';
 import makeData from './components/makeData';
 import TableInfoUser from './components/TableInfoUser';
 
@@ -88,8 +89,9 @@ export default function DetailClass() {
   const teacherData = React.useMemo(() => makeData(3), [])
 
   return (
-    <Container className="mt-5">
-      <h4>Thông tin lớp học</h4>
+    <Container>
+      <TabsDetail />
+      <h4 className="mt-3">Thông tin lớp học</h4>
       <Alert variant='success'>
         <Row>
           <Col>

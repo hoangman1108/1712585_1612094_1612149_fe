@@ -1,25 +1,22 @@
 import React from 'react'
-import { Card, Col, Row, Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import { Card, Col, Row } from 'react-bootstrap';
 
-export default function CardClass({ showDelete, info, role }) {
+export default function CardClass({ info }) {
   return (
     <Card className="card-class" key={info.id}>
       <Card.Body>
         <Card.Title className="title"
-          onClick={() => window.open(`/classes/${info.id}`, "_blank")}
+          onClick={() => window.open(`/classes/${info.id}/detail`, "_blank")}
         >Lớp {info.name}</Card.Title>
         <Card.Text>
           <Row>
             <Col sm={10}>
-              <span>Sĩ số: {info.quantity} học sinh</span>
+              <span>Sĩ số: {info.students.length}</span>
               <br />
-              <span>GVCN: {info.teacher}</span>
+              <span>GVCN: {info.teachers.length}</span>
             </Col>
             <Col sm={2}>
-
-              {
+              {/* {
                 role === 'teacher' && (<Button variant="outline-danger"
                   onClick={() => {
                     showDelete(info.id);
@@ -27,7 +24,7 @@ export default function CardClass({ showDelete, info, role }) {
                 >
                   <FontAwesomeIcon icon={faTrashAlt} />
                 </Button>)
-              }
+              } */}
             </Col>
           </Row>
         </Card.Text>

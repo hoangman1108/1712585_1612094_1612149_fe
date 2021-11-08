@@ -14,7 +14,7 @@ const loginSchema = yup.object({
   password: yup.string().min(6).required(),
 });
 
-const initialLoginValues = { username: "0967945772", password: "man1234" };
+const initialLoginValues = { username: "teacher3@gmail.com", password: "teacher123" };
 
 const LoginScreen = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
