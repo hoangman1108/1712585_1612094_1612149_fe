@@ -40,7 +40,6 @@ const LoginScreen = () => {
               const { username, password } = values;
               dispatch(login(username, password))
                 .then(() => {
-                  console.log(message, 'message');
                   nProgress.done();
                   window.location.reload();
                 })

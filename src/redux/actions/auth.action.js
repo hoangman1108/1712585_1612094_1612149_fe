@@ -14,7 +14,6 @@ export const register = (data) => dispatch => {
       dispatch({
         type: REGISTER_SUCCESS,
       });
-      console.log(response, 'response register');
       dispatch({
         type: SET_MESSAGE,
         payload: response.data.message,
@@ -64,6 +63,28 @@ export const login = (username, password) => dispatch => {
       dispatch({
         type: SET_MESSAGE,
         payload: message,
+      });
+      return Promise.reject();
+    }
+  )
+}
+
+export const me = () => dispatch => {
+  return authService.me().then(
+    (data) => {
+      console.log(data, '------data-------')
+      return Promise.resolve();
+    },
+    (error) => {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+        console.log(message, '=====message=');
+      dispatch({
+        type: LOGOUT,
       });
       return Promise.reject();
     }

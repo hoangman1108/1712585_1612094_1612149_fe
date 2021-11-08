@@ -11,7 +11,7 @@ const propTypes = {
 
 const defaultProps = {
 	restricted: false,
-	redirect: "auth/login",
+	redirect: "/auth/login",
 	isAuthenticated: false,
 };
 

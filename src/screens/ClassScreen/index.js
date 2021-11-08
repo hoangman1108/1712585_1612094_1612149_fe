@@ -7,14 +7,12 @@ import DeleteClassModel from './components/DeleteClassModel';
 import ModelShow from './components/ModelShow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
-import { API_URL } from '../../utils/const';
 import { useDispatch, useSelector } from 'react-redux';
 import { createClass, getListClass } from '../../redux/actions/class.action';
 
 function ClassScreen() {
   const [showAddModel, setShowAddModel] = useState(false);
   const [showDeleteModel, setShowDeleteModel] = useState(false);
-  const [data, setData] = useState([]);
   const [id, setId] = useState('');
   const [msgError, setMsgError] = useState('');
   const handleCloseAddModel = () => setShowAddModel(false);
@@ -67,6 +65,7 @@ function ClassScreen() {
 
   const listClass = () => {
     return classes.map((element, index) => {
+      console.log(element, 'element');
       return (<Col key={index}>
         <CardClass role={role} deleteData={deleteData} info={element} showDelete={handleShowDeleteModel} />
       </Col>)

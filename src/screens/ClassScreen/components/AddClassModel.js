@@ -1,8 +1,12 @@
 import React from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { Formik } from 'formik';
+import { useSelector } from "react-redux";
 
 export default function AddClassModel({ show, handleClose, createData, msgError }) {
+
+  const { classes } = useSelector(state => state.class)
+  const data = classes.filter(element => element.role === 'teacher');
   return (
     <Modal
       show={show}

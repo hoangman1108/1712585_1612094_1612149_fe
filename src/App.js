@@ -1,5 +1,5 @@
-import React from "react";
-import { BrowserRouter as Router, Switch } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 // import { createBrowserHistory } from "history";
 import HomeScreen from "./screens/HomeScreen";
 import ClassScreen from "./screens/ClassScreen";
@@ -10,14 +10,21 @@ import Header from "./components/Header";
 import Management from "./screens/Management";
 import PrivateRoute from './components/PrivateRouter';
 import PublicRoute from './components/PublicRouter';
-import { useSelector } from "react-redux";
+import DetailClass from "./screens/DetailClass";
+import NotFoundScreen from "./screens/NotFoundScreen";
+import { useDispatch, useSelector } from "react-redux";
+import { me } from "./redux/actions/auth.action";
 // const history = createBrowserHistory();
 
 function App() {
 
-  const { isLoggedIn } = useSelector(state => state.auth);
-
-
+  const { isLoggedIn, user } = useSelector(state => state.auth);
+  // const { message } = useSelector(state => state.message);
+  const dispatch = useDispatch();
+  // console.log(message, '------message------');
+  useEffect(() => {
+    dispatch(me());
+  }, [])
 
   const publicRoutes = [
     {
@@ -31,10 +38,14 @@ function App() {
     {
       path: '/',
       component: () => <HomeScreen />,
-    },
+    }
   ];
 
   const privateRoutes = [
+    {
+      path: '/classes/:id',
+      component: () => <DetailClass />,
+    },
     {
       path: '/classes',
       component: () => <ClassScreen />,
@@ -65,6 +76,7 @@ function App() {
               path={item.path}
               component={item.component} />
           ))}
+          <Route path="*" component={NotFoundScreen}/>
         </Switch>
       </Router>
     </>

@@ -4,7 +4,6 @@ import { API_URL } from "../utils/const";
 
 
 const getAllClass = () => {
-  console.log(authHeader(), 'authHeader()');
   return axios.get(API_URL + "/classes", { headers: authHeader() });
 };
 

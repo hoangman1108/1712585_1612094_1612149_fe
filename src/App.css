@@ -1,11 +1,16 @@
 .card-class {
   margin-top: 5px;
-  width: 400px;
+  width: 80%;
+  margin-left: 10%;
 }
 
 .card-class .title {
-  border: 1px solid rgb(57, 57, 57) !important;
+  border: 1px solid rgba(57, 57, 57, 0.55) !important;
   padding: 5px;
+}
+
+.card-class .title:hover {
+  border: 2px solid rgba(33, 118, 46, 0.55) !important;
 }
 
 .paginate-class {
@@ -23,8 +28,7 @@ input:focus {
   box-shadow: 0 0 5px #0c5c37 !important;
 }
 
-
-.custom-nav-link{
+.custom-nav-link {
   font-size: 14px !important;
   font-weight: bold !important;
   /* text-transform: uppercase !important; */
@@ -32,16 +36,16 @@ input:focus {
   border-radius: 0 !important;
 }
 
-.color-iCoin{
+.color-iCoin {
   color: #00b661;
 }
 
 /* override */
-.offcanvas-body{
+.offcanvas-body {
   padding: 0 !important;
 }
 
-.bg-navbar{
+.bg-navbar {
   margin: 2px 0 !important;
   background: #2a212140 !important;
 }
@@ -49,4 +53,17 @@ input:focus {
 .bg-navbar:hover {
   margin: 2px 0 !important;
   background: #3c3a3a40 !important;
+}
+
+.tr-header-table {
+  color: #00b661;
+}
+
+.pagination-custom button{
+  font-size: 12px;
+  border: 0px;
+  padding: 5px 12px;
+}
+.pagination-custom select{
+  width: 100px;
 }
