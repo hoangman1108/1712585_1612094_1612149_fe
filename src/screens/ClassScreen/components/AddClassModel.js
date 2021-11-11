@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { Formik } from 'formik';
 import userService from "../../../services/user.service";
 import { createClass } from "../../../redux/actions/class.action";
-export default function AddClassModel({ show, handleClose, msgError }) {
+export default function AddClassModel({ show, handleClose }) {
   const [teachers, setTeachers] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
@@ -74,7 +74,7 @@ export default function AddClassModel({ show, handleClose, msgError }) {
                   value={values.name}
                   placeholder="10A3" />
                 <Form.Text className="text-error">
-                  {(errors.name && touched.name && errors.name) || msgError}
+                  {(errors.name && touched.name && errors.name)}
                 </Form.Text>
               </Form.Group>
               <Form.Group className="mb-3">

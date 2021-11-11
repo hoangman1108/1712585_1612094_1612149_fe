@@ -6,12 +6,9 @@ export default function TabsDetail() {
   const history = useHistory();
   const currentPath = history.location.pathname.split('/')[3];
   const handleChangePage = (path) => {
-    console.log(currentPath, path);
     if (currentPath === path) {
       return;
     }
-    console.log(history.location.pathname.replace(currentPath, path));
-    // window.open(history.location.pathname.replace(currentPath, path));
     history.push(history.location.pathname.replace(currentPath, path));
   }
   return (

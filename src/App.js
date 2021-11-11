@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-// import { createBrowserHistory } from "history";
 import HomeScreen from "./screens/HomeScreen";
 import ClassScreen from "./screens/ClassScreen";
 import LoginScreen from "./screens/LoginScreen";
@@ -15,16 +14,16 @@ import NotFoundScreen from "./screens/NotFoundScreen";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "./redux/actions/auth.action";
 import AssignmentClass from "./screens/AssignmentClass";
-// const history = createBrowserHistory();
+import { getListClass } from "./redux/actions/class.action";
 
 function App() {
 
-  const { isLoggedIn, user } = useSelector(state => state.auth);
-  // const { message } = useSelector(state => state.message);
+  const { isLoggedIn } = useSelector(state => state.auth);
   const dispatch = useDispatch();
-  // console.log(message, '------message------');
   useEffect(() => {
     dispatch(me());
+    dispatch(getListClass());
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const publicRoutes = [

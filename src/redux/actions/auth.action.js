@@ -72,17 +72,15 @@ export const login = (username, password) => dispatch => {
 export const me = () => dispatch => {
   return authService.me().then(
     (data) => {
-      console.log(data, '------data-------')
       return Promise.resolve();
     },
     (error) => {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-        console.log(message, '=====message=');
+      // const message =
+      //   (error.response &&
+      //     error.response.data &&
+      //     error.response.data.message) ||
+      //   error.message ||
+      //   error.toString();
       dispatch({
         type: LOGOUT,
       });

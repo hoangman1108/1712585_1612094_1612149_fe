@@ -1,12 +1,14 @@
 import React from 'react'
 import { Card, Col, Row } from 'react-bootstrap';
+import { useHistory } from 'react-router';
 
 export default function CardClass({ info }) {
+  const history = useHistory();
   return (
     <Card className="card-class" key={info.id}>
       <Card.Body>
         <Card.Title className="title"
-          onClick={() => window.open(`/classes/${info.id}/detail`, "_blank")}
+          onClick={() => history.push(`/classes/${info.id}/detail`)}
         >Lớp {info.name}</Card.Title>
         <Card.Text>
           <Row>

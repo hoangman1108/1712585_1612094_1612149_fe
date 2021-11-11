@@ -26,7 +26,6 @@ function TableInfoUser({ columns, data }) {
     },
     usePagination
   )
-
   return (
     <>
       {/* <pre>

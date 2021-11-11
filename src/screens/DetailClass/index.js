@@ -1,10 +1,36 @@
-import React from 'react'
+import nProgress from 'nprogress';
+import React, { useEffect, useState } from 'react'
 import { Container, Alert, Row, Col } from 'react-bootstrap'
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import userService from '../../services/user.service';
 import TabsDetail from '../ClassScreen/components/TabsDetail';
 import makeData from './components/makeData';
 import TableInfoUser from './components/TableInfoUser';
 
 export default function DetailClass() {
+  const history = useHistory();
+  const { classes } = useSelector(state => state.class)
+  const [studentData, setStudentData] = useState([]);
+  const [teacherData, setTeacherData] = useState([]);
+  console.log(teacherData, 'teacherData');
+  useEffect(() => {
+    userService.getUserByRole("student")
+      .then((response) => {
+        setStudentData(makeData(response?.data))
+      });
+    userService.getUserByRole("teacher")
+      .then((response) => {
+        setTeacherData(makeData(response?.data))
+      });
+  }, [])
+
+  const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
+  if (!data) {
+    nProgress.start();
+  } else {
+    nProgress.done();
+  }
   const studentColumns = React.useMemo(
     () => [
       {
@@ -85,8 +111,8 @@ export default function DetailClass() {
     []
   )
 
-  const studentData = React.useMemo(() => makeData(100), [])
-  const teacherData = React.useMemo(() => makeData(3), [])
+  console.log(data?.students);
+
 
   return (
     <Container>
@@ -95,10 +121,10 @@ export default function DetailClass() {
       <Alert variant='success'>
         <Row>
           <Col>
-            <span>Mã lớp: 12A3</span>
+            <span>Mã lớp: {data?.name}</span>
           </Col>
           <Col>
-            <span>Sĩ số: 33</span>
+            <span>Sĩ số: {data?.students?.length}</span>
           </Col>
         </Row>
       </Alert>
