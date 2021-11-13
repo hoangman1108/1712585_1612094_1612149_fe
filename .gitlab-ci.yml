@@ -1,0 +1,25 @@
+stages:
+  - docker-build
+  - deploy
+
+docker-build:
+  stage: docker-build
+  image: kroniak/ssh-client
+  before_script:
+    - echo "deploying app"
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > key.pem
+    - chmod 400 key.pem
+  script:
+    - ssh -o StrictHostKeyChecking=no -i key.pem $USER_NAME@$PROD_SERVER_IP "export GPG_TTY=$(tty) && git clone https://$USER_GIT_LAB:$PW_GIT_LAB@gitlab.com/hoangman1108/deploy-frontend.git"
+    - ssh -o StrictHostKeyChecking=no -i key.pem $USER_NAME@$PROD_SERVER_IP "export GPG_TTY=$(tty) && cd deploy-frontend && docker build . -t deploy-frontend"
+deploy:
+  stage: deploy
+  image: kroniak/ssh-client
+  before_script:
+    - echo "deploying app"
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' > key.pem
+    - chmod 400 key.pem
+
+  script:
+    - ssh -o StrictHostKeyChecking=no -i key.pem $USER_NAME@$PROD_SERVER_IP "docker stop deploy-frontend || true && docker rm deploy-frontend || true"
+    - ssh -o StrictHostKeyChecking=no -i key.pem $USER_NAME@$PROD_SERVER_IP "docker run -p 3000:3000 -d --name deploy-frontend deploy-frontend"
