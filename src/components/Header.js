@@ -71,7 +71,7 @@ export default function Header() {
             <Nav className="justify-content-end flex-grow-1 bg-navbar">
               <Nav.Link
                 className="custom-nav-link text-light px-3"
-                href="/classes"
+                href="/classes?offset=1&limit=6"
               >
                 <FontAwesomeIcon className="color-iCoin" icon={faUserFriends} />
                 {" "} Classes

@@ -7,41 +7,26 @@ import ModelShow from './components/ModelShow';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import CustomPagination from './components/CustomPagination';
+import { useHistory } from 'react-router';
 
 function ClassScreen() {
   const [showAddModel, setShowAddModel] = useState(false);
   const handleCloseAddModel = () => setShowAddModel(false);
   const handleShowAddModel = () => setShowAddModel(true);
 
-  const { classes } = useSelector(state => state.class)
-  const { role } = useSelector(state => state.auth)
-  const { message } = useSelector(state => state.message)
-  // useEffect(() => {
-  //   dispatch(getListClass());
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-  // const createData = (value) => {
-  //   // const requestOptions = {
-  //   //   method: 'POST',
-  //   //   headers: { 'Content-Type': 'application/json' },
-  //   //   body: JSON.stringify(value)
-  //   // };
-  //   // fetch(`${API_URL}/classes`, requestOptions)
-  //   //   .then(response => response.json())
-  //   //   .then(result => {
-  //   //     if (result.message) {
-  //   //       setMsgError(result.message);
-  //   //     } else {
-  //   //       setData([...data, result]);
-  //   //     }
-  //   //   });
+  const { classes } = useSelector(state => state.class);
+  const { role } = useSelector(state => state.auth);
+  const { message } = useSelector(state => state.message);
 
-  //   dispatch(createClass(value));
+  const history = useHistory();
 
-  // }
-
+  const offset = history.location.search.split('&')[0].split('=')[1];
+  const limit = history.location.search.split('&')[1].split('=')[1];
+  console.log(offset, limit, 'offset-limit');
   const listClass = () => {
-    return classes.map((element, index) => {
+    const newClass = classes.slice(limit*(offset - 1), limit*(offset));
+    return newClass.map((element, index) => {
       return (<Col className="mt-3" xs={4} key={index}>
         <CardClass info={element} />
       </Col>)
@@ -61,8 +46,10 @@ function ClassScreen() {
       <Row>
         {listClass()}
       </Row>
+      <div className="text-center mt-3">
+        <CustomPagination offset={offset} limit={limit} length={classes.length} history={history} />
+      </div>
       <AddClassModel handleClose={handleCloseAddModel} show={showAddModel} />
-      {/* <DeleteClassModel deleteData={deleteData} handleClose={handleCloseDeleteModel} show={showDeleteModel} /> */}
       {message && (<ModelShow message={message} />)}
     </Container>
   );
