@@ -8,13 +8,18 @@ import { useDispatch } from "react-redux";
 import { login } from "../../redux/actions/auth.action";
 import convertMessage from "../../utils/converMessage";
 import { Redirect } from "react-router";
+import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login";
 
 const loginSchema = yup.object({
   username: yup.string().required(),
   password: yup.string().min(6).required(),
 });
 
-const initialLoginValues = { username: "teacher3@gmail.com", password: "teacher123" };
+const initialLoginValues = {
+  username: "teacher3@gmail.com",
+  password: "teacher123",
+};
 
 const LoginScreen = () => {
   const { isLoggedIn } = useSelector((state) => state.auth);
@@ -22,8 +27,21 @@ const LoginScreen = () => {
 
   const dispatch = useDispatch();
 
+  console.log("process.env", process.env.CLIENT_ID);
+  const responseGoogle = (e) => {
+    console.log("gg respone", e);
+  };
+
+  const componentClicked = (e) => {
+    console.log("fb response", e);
+  };
+
+  const responseFacebook = (e) => {
+    console.log("res fb", e);
+  };
+
   if (isLoggedIn) {
-    return(<Redirect to={'/'} />)
+    return <Redirect to={"/"} />;
   }
 
   return (
@@ -114,9 +132,24 @@ const LoginScreen = () => {
               </Form>
             )}
           </Formik>
+          <GoogleLogin
+            clientId="821562410080-eijar72ipfckaegtgibojd4gmbnbph00.apps.googleusercontent.com"
+            buttonText="Login"
+            onSuccess={responseGoogle}
+            onFailure={responseGoogle}
+            cookiePolicy={"single_host_origin"}
+          />
+          <FacebookLogin
+            appId="228297662727019"
+            // autoLoad={true}
+            fields="name,email,picture"
+            onClick={componentClicked}
+            callback={responseFacebook}
+          />
+          ,
         </Col>
       </Row>
-    </Container >
+    </Container>
   );
 };
 
