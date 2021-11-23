@@ -1,19 +1,29 @@
 import nProgress from 'nprogress';
 import React, { useEffect, useState } from 'react'
-import { Container, Alert, Row, Col } from 'react-bootstrap'
+import { Container, Alert, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import userService from '../../services/user.service';
 import TabsDetail from '../ClassScreen/components/TabsDetail';
 import makeData from './components/makeData';
 import TableInfoUser from './components/TableInfoUser';
+import { BsFillPersonPlusFill } from "react-icons/bs";
+import InviteClassModal from './components/InviteClassModal';
 
 export default function DetailClass() {
   const history = useHistory();
   const { classes } = useSelector(state => state.class)
   const [studentData, setStudentData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
-  console.log(teacherData, 'teacherData');
+  const [isInviteTeacher, setIsInviteTeacher] = useState(false);
+  const [showInviteModal, setShowInviteModal] = useState(false);
+  const handleCloseInviteModal = () => setShowInviteModal(false);
+  const handleShowInviteModal = (inviteObject) => {
+    setShowInviteModal(true);
+    setIsInviteTeacher(inviteObject === "inviteTeacher" ? true : false);
+  }
+
+  // console.log(teacherData, 'teacherData');
   useEffect(() => {
     userService.getUserByRole("student")
       .then((response) => {
@@ -111,7 +121,7 @@ export default function DetailClass() {
     []
   )
 
-  console.log(data?.students);
+  // console.log(data?.students);
 
 
   return (
@@ -128,11 +138,37 @@ export default function DetailClass() {
           </Col>
         </Row>
       </Alert>
-      <h5 className="mt-5 fw-bold">Danh sách Giáo viên</h5>
-      <TableInfoUser columns={teacherColumns} data={teacherData} />
 
-      <h5 className="mt-5 fw-bold">Danh sách sinh viên</h5>
+      <Row className="mt-5">
+        <Col>
+          <h5 className="fw-bold">Danh sách Giáo viên</h5>
+        </Col>
+        <Col>
+          <BsFillPersonPlusFill 
+            className="h4 float-end"
+            name="inviteTeacher"
+            onClick={handleShowInviteModal.bind(this, "inviteTeacher")}
+          />
+        </Col>
+      </Row>
+      <TableInfoUser columns={teacherColumns} data={teacherData} />
+      
+      
+      <Row className="mt-5">
+        <Col>
+          <h5 className="fw-bold">Danh sách sinh viên</h5>
+        </Col>
+        <Col>
+          <BsFillPersonPlusFill 
+            className="h4 cursor-pointer float-end" 
+            name="inviteStudent"
+            onClick={handleShowInviteModal.bind(this, "inviteStudent")}
+          />
+        </Col>
+      </Row>
       <TableInfoUser columns={studentColumns} data={studentData} />
+
+      <InviteClassModal handleClose={handleCloseInviteModal} show={showInviteModal} isInviteTeacher={isInviteTeacher} />
     </Container>
   )
 }
