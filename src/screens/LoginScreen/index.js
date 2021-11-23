@@ -10,6 +10,7 @@ import convertMessage from "../../utils/converMessage";
 import { Redirect } from "react-router";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
+import axios from "axios";
 
 const loginSchema = yup.object({
   username: yup.string().required(),
@@ -29,7 +30,30 @@ const LoginScreen = () => {
 
   console.log("process.env", process.env.CLIENT_ID);
   const responseGoogle = (e) => {
-    console.log("gg respone", e);
+    const { profileObj } = e;
+    console.log("res", e);
+    console.log("accessToken", profileObj);
+
+    const profile = {
+      name: profileObj.name,
+      role: "student",
+      email: profileObj.email,
+      password: profileObj.googleId,
+      facebook: "string",
+      google: profileObj.googleId,
+    };
+    const username = profileObj.email;
+    const password = profileObj.googleId;
+
+    dispatch(login(username, password))
+      .then(() => {
+        nProgress.done();
+        window.location.reload();
+      })
+      .catch(() => {
+        nProgress.done();
+        // setLoading(false);
+      });
   };
 
   const componentClicked = (e) => {
