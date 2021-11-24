@@ -11,8 +11,6 @@ export default function JoinClass() {
     const { me } = useSelector(state => state.auth);
     const [isExistClass, setIsExistClass] = useState(false);
 
-    console.log("history: ", history);
-    console.log("classes: ", classes);
     console.log(history.location.pathname.split('/'));
     const pathName = history.location.pathname.split('/');
     const data = classes.find(element => element.id === pathName[3]);
@@ -22,8 +20,9 @@ export default function JoinClass() {
         nProgress.done();
     }
 
-    data?.codeJoin ? setIsExistClass(true) : setIsExistClass(false);
-    console.log("data: ", data);
+    useEffect(()=>{
+        setIsExistClass(!!data?.codeJoin)
+    },[data?.codeJoin]);
 
     const handleJoinClass = () => {
         

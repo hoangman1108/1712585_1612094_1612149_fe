@@ -37,16 +37,16 @@ function App() {
       component: () => <RegisterScreen />,
     },
     {
-      path: '/classes/invite/:id',
-      component: () => <JoinClass />,
-    },
-    {
       path: '/',
       component: () => <HomeScreen />,
     }
   ];
 
   const privateRoutes = [
+    {
+      path: '/classes/invite/:id',
+      component: () => <JoinClass />,
+    },
     {
       path: '/classes/:id/detail',
       component: () => <DetailClass />,
