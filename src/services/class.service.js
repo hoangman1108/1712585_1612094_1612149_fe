@@ -15,8 +15,8 @@ const deleteClass = (id) => {
   return axios.delete(API_URL + `/classes/${id}`, { headers: authHeader() });
 }
 
-const joinClass = (userID, classID) => {
-  return true;
+const joinClass = (data) => {
+  return axios.post(API_URL + "/classes/joinClass", data, { headers: authHeader() });
 }
 
 const classService = {

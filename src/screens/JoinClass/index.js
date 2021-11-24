@@ -1,6 +1,6 @@
 import nProgress from 'nprogress';
 import React, { useEffect, useState } from 'react';
-import { Card, Button, Row, Col } from 'react-bootstrap';
+import { Card, Button } from 'react-bootstrap';
 import { useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
 import classService from '../../services/class.service';
@@ -11,7 +11,6 @@ export default function JoinClass() {
     const { me } = useSelector(state => state.auth);
     const [isExistClass, setIsExistClass] = useState(false);
 
-    console.log(history.location.pathname.split('/'));
     const pathName = history.location.pathname.split('/');
     const data = classes.find(element => element.id === pathName[3]);
     if (!data) {
@@ -20,16 +19,40 @@ export default function JoinClass() {
         nProgress.done();
     }
 
-    useEffect(()=>{
-        setIsExistClass(!!data?.codeJoin)
-    },[data?.codeJoin]);
+    useEffect(() => {
+        setIsExistClass(!!data?.codeJoin);
+        if (data?.codeJoin) {
+            const dataUsers = me.role === "teacher" ? data.teachers : data.students;
+            const userExisted = dataUsers.find(user => user === me.id);
+            if (userExisted) window.location.href = `/classes/${data.id}/detail`;
+        }
+    }, [data?.codeJoin]);
 
     const handleJoinClass = () => {
-        
+        if (isExistClass) {
+            const dataInput = {
+                classId: data.id,
+                userId: me.id
+            }
+            classService.joinClass(dataInput)
+                .then((res) => {
+                    window.location.href = `/classes/${dataInput.classId}/detail`;
+                }, (error) => {
+                    const message =
+                        (error.response &&
+                            error.response.data &&
+                            error.response.data.message) ||
+                        error.message ||
+                        error.toString();
+                    console.log(message);
+                });
+        } else {
+            window.location.href = '/';
+        }
     };
 
     return (
-        <Card style={{ width: '18rem' }}>
+        <Card className="mx-auto" style={{ width: '18rem', marginTop: '10rem' }}>
             {
                 isExistClass && (<Card.Body>
                     <Card.Title>Tham gia lớp học?</Card.Title>
@@ -42,7 +65,7 @@ export default function JoinClass() {
             }
             {
                 !isExistClass && (<Card.Body>
-                    <Card.Title>Tham gia lớp học?</Card.Title>
+                    <Card.Title>Không tìm thấy lớp cần tham gia</Card.Title>
                     <Button variant="primary" onClick={handleJoinClass}>Trang chủ</Button>
                 </Card.Body>)
             }

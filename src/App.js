@@ -60,9 +60,13 @@ function App() {
       component: () => <ClassScreen />,
     },
     {
+      path: '/classes/invite/:id',
+      component: () => <JoinClass />,
+    },
+    {
       path: '/management',
       component: () => <Management />,
-    },
+    }
   ]
 
   return (
