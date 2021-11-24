@@ -32,8 +32,8 @@ const LoginScreen = () => {
   const responseGoogle = async (e) => {
     const { profileObj } = e;
 
-    const username = profileObj.email;
-    const password = profileObj.googleId;
+    const username = (profileObj && profileObj.email) || "";
+    const password = (profileObj && profileObj.googleId) || "";
 
     authService
       .login(username, password)
@@ -46,14 +46,15 @@ const LoginScreen = () => {
       })
       .catch((err) => {
         const profile = {
-          name: profileObj.name,
-          email: profileObj.email,
-          password: profileObj.googleId,
-          google: profileObj.googleId,
+          name: (profileObj && profileObj.name) || "",
+          email: (profileObj && profileObj.email) || "",
+          password: (profileObj && profileObj.googleId) || "",
+          google: (profileObj && profileObj.googleId) || "",
           facebook: "",
         };
         dispatch({ type: SET_INFO_REGISTER, payload: profile });
-        window.location.href = "/auth/register";
+
+        profileObj && (window.location.href = "/auth/register");
       });
   };
 
@@ -80,7 +81,7 @@ const LoginScreen = () => {
               dispatch(login(username, password))
                 .then(() => {
                   nProgress.done();
-                  // window.location.reload();
+                  window.location.reload();
                 })
                 .catch(() => {
                   nProgress.done();

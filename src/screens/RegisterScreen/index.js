@@ -52,8 +52,14 @@ const RegisterScreen = (props) => {
                   dispatch({ type: RESET_INFO_REGISTER });
                   window.location.href = "/auth/login";
                 })
-                .catch((err) => {
-                  toast.error(err.message);
+                .catch((error) => {
+                  const message =
+                    (error.response &&
+                      error.response.data &&
+                      error.response.data.message) ||
+                    error.message ||
+                    error.toString();
+                  toast.error(message);
                 });
             }}
           >
@@ -137,7 +143,7 @@ const RegisterScreen = (props) => {
                     required={true}
                     name="phone"
                   />
-                   {props.errors.phone && (
+                  {props.errors.phone && (
                     <Form.Text className="text-danger">
                       {props.errors.phone}
                     </Form.Text>
