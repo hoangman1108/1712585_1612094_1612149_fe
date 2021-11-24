@@ -1,38 +1,65 @@
 import React from "react";
+import * as yup from "yup";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
 import { connect } from "react-redux";
+import { RESET_INFO_REGISTER } from "../../redux/actions/types";
+import { useDispatch } from "react-redux";
+import authService from "../../services/auth.service";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+const registerSchema = yup.object({
+  // username: yup.string().required(),
+  phone: yup.string().min(10).required(),
+});
 
 const RegisterScreen = (props) => {
-  console.log("props register day", props);
+  const dispatch = useDispatch();
+  const { name, email, password, google, facebook } = props.infoUserRegister;
   const initialLoginValues = {
-    name: "",
+    name,
     dob: "",
-    role: "string",
-    email: "",
+    role: "student",
+    email,
     mssv: "",
     phone: "",
-    password: "",
+    google,
+    facebook,
+    password,
     confirmPassword: "",
   };
+  // (() => )();
   return (
     <Container>
+      <ToastContainer />
       <Row className="mt-1">
         <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
-          <h1 className="text-success fw-bold text-center rounded">Register</h1>
+          <h1 className="text-success fw-bold text-center rounded">
+            Register {google && "by Google"} {facebook && "by facebook"}
+          </h1>
 
           <Formik
             initialValues={initialLoginValues}
-            // validationSchema={loginSchema}
+            validationSchema={registerSchema}
             onSubmit={(values, actions) => {
               // nProgress.start();
               actions.setSubmitting(false);
-              console.log("co vao day", values);
+              delete values.confirmPassword;
+              authService
+                .register(values)
+                .then(() => {
+                  dispatch({ type: RESET_INFO_REGISTER });
+                  window.location.href = "/auth/login";
+                })
+                .catch((err) => {
+                  toast.error(err.message);
+                });
             }}
           >
             {(props) => (
               <Form onSubmit={props.handleSubmit}>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" hidden={name ? true : false}>
                   <Form.Label>Full name</Form.Label>
                   <Form.Control
                     className="focus-success"
@@ -44,11 +71,6 @@ const RegisterScreen = (props) => {
                     required={true}
                     name="name"
                   />
-                  {props.errors.name && (
-                    <Form.Text className="text-danger">
-                      {props.errors.name}
-                    </Form.Text>
-                  )}
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Date of birth</Form.Label>
@@ -77,7 +99,7 @@ const RegisterScreen = (props) => {
                     <option value="teacher">teacher</option>
                   </Form.Select>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" hidden={email ? true : false}>
                   <Form.Label>Email</Form.Label>
                   <Form.Control
                     className="focus-success"
@@ -115,8 +137,13 @@ const RegisterScreen = (props) => {
                     required={true}
                     name="phone"
                   />
+                   {props.errors.phone && (
+                    <Form.Text className="text-danger">
+                      {props.errors.phone}
+                    </Form.Text>
+                  )}
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" hidden={password ? true : false}>
                   <Form.Label>Password</Form.Label>
                   <Form.Control
                     type="password"
@@ -127,7 +154,7 @@ const RegisterScreen = (props) => {
                     name="password"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-3" hidden={password ? true : false}>
                   <Form.Label>Confirm Password</Form.Label>
                   <Form.Control
                     type="password"
@@ -135,7 +162,6 @@ const RegisterScreen = (props) => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.confirmPassword}
-                    required={true}
                     name="confirmPassword"
                   />
                 </Form.Group>
@@ -165,6 +191,6 @@ const RegisterScreen = (props) => {
   );
 };
 const mapStateToProps = (state) => ({
-  infoUserRegister: state.infoUserRegister,
+  infoUserRegister: state.register.infoUserRegister,
 });
 export default connect(mapStateToProps)(RegisterScreen);

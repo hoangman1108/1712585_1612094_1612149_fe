@@ -11,7 +11,7 @@ import { Redirect } from "react-router";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 import authService from "../../services/auth.service";
-import {SET_INFO_REGISTER, RESET_INFO_REGISTER} from '../../redux/actions/types'
+import { SET_INFO_REGISTER } from "../../redux/actions/types";
 
 const loginSchema = yup.object({
   username: yup.string().required(),
@@ -33,12 +33,12 @@ const LoginScreen = () => {
     const { profileObj } = e;
 
     const username = profileObj.email;
-    const password = "profileObj.googleId";
+    const password = profileObj.googleId;
 
     authService
       .login(username, password)
       .then((res) => {
-        console.log("res login", res);
+        window.location.reload();
       })
       .catch((err) => {
         const profile = {
@@ -46,13 +46,11 @@ const LoginScreen = () => {
           email: profileObj.email,
           password: profileObj.googleId,
           google: profileObj.googleId,
+          facebook: "",
         };
         dispatch({ type: SET_INFO_REGISTER, payload: profile });
+        window.location.href = "/auth/register";
       });
-  };
-
-  const componentClicked = (e) => {
-    console.log("fb response", e);
   };
 
   const responseFacebook = (e) => {
@@ -162,7 +160,6 @@ const LoginScreen = () => {
             appId="228297662727019"
             // autoLoad={true}
             fields="name,email,picture"
-            onClick={componentClicked}
             callback={responseFacebook}
           />
           ,
