@@ -52,6 +52,9 @@ const RegisterScreen = (props) => {
               if (!values.google) {
                 delete values.google;
               }
+              if (!values.mssv) {
+                delete values.mssv;
+              }
               authService
                 .register(values)
                 .then(() => {
