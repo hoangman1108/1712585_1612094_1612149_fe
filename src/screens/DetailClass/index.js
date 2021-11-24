@@ -13,6 +13,7 @@ import classService from '../../services/class.service';
 export default function DetailClass() {
   const history = useHistory();
   const { classes } = useSelector(state => state.class)
+  const { me } = useSelector(state => state.auth)
   const [studentData, setStudentData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [isInviteTeacher, setIsInviteTeacher] = useState(false);
@@ -139,13 +140,15 @@ export default function DetailClass() {
         <Col>
           <h5 className="fw-bold">Danh sách Giáo viên</h5>
         </Col>
-        <Col>
-          <BsFillPersonPlusFill
-            className="h4 float-end"
-            name="inviteTeacher"
-            onClick={handleShowInviteModal.bind(this, "inviteTeacher")}
-          />
-        </Col>
+        {
+          me.role === "teacher" && (<Col>
+            <BsFillPersonPlusFill
+              className="h4 float-end"
+              name="inviteTeacher"
+              onClick={handleShowInviteModal.bind(this, "inviteTeacher")}
+            />
+          </Col>)
+        }
       </Row>
       <TableInfoUser columns={teacherColumns} data={teacherData} />
 
@@ -155,11 +158,15 @@ export default function DetailClass() {
           <h5 className="fw-bold">Danh sách sinh viên</h5>
         </Col>
         <Col>
-          <BsFillPersonPlusFill
-            className="h4 cursor-pointer float-end"
-            name="inviteStudent"
-            onClick={handleShowInviteModal.bind(this, "inviteStudent")}
-          />
+          {
+            me.role === "teacher" && (<BsFillPersonPlusFill
+              className="h4 cursor-pointer float-end"
+              name="inviteStudent"
+              onClick={handleShowInviteModal.bind(this, "inviteStudent")}
+            />
+            )
+          }
+          
         </Col>
       </Row>
       <TableInfoUser columns={studentColumns} data={studentData} />
