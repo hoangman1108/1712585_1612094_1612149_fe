@@ -8,6 +8,7 @@ export const LOGOUT = "LOGOUT";
 
 export const GET_ME_SUCCESS = "GET_ME_SUCCESS";
 export const GET_ME_FAIL = "GET_ME_FAIL";
+export const GET_ME_INFO = "GET_ME_INFO";
 
 
 export const SET_MESSAGE = "SET_MESSAGE";

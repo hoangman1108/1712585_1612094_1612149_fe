@@ -11,6 +11,7 @@ import PrivateRoute from './components/PrivateRouter';
 import PublicRoute from './components/PublicRouter';
 import DetailClass from "./screens/DetailClass";
 import NotFoundScreen from "./screens/NotFoundScreen";
+import JoinClass from "./screens/JoinClass";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "./redux/actions/auth.action";
 import AssignmentClass from "./screens/AssignmentClass";
@@ -34,6 +35,10 @@ function App() {
     {
       path: '/auth/register',
       component: () => <RegisterScreen />,
+    },
+    {
+      path: '/classes/invite/:id',
+      component: () => <JoinClass />,
     },
     {
       path: '/',

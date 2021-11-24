@@ -5,6 +5,7 @@ import {
   LOGIN_FAIL,
   LOGOUT,
   SET_MESSAGE,
+  GET_ME_INFO
 } from "./types";
 import authService from "../../services/auth.service";
 
@@ -72,6 +73,10 @@ export const login = (username, password) => (dispatch) => {
 export const me = () => (dispatch) => {
   return authService.me().then(
     (data) => {
+      dispatch({
+        type: GET_ME_INFO,
+        payload: data.data,
+      });
       return Promise.resolve();
     },
     (error) => {

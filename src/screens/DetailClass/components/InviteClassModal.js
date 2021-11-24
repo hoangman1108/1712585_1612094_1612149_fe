@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import nProgress from "nprogress";
 import { Modal, Button, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
 import { Formik } from 'formik';
-import { inviteJoinClass } from "../../../redux/actions/email.action";
-export default function InviteClassModal({ show, handleClose, isInviteTeacher }) {
-  const dispatch = useDispatch();
+import emailService from "../../../services/email.service";
+import { useSelector } from 'react-redux';
 
+export default function InviteClassModal({ show, handleClose, isInviteTeacher, getInfoClass }) {
+  const { me } = useSelector(state => state.auth);
+  const infoClass = getInfoClass();
   return (
     <Modal
       show={show}
@@ -25,15 +26,22 @@ export default function InviteClassModal({ show, handleClose, isInviteTeacher })
         }}
         onSubmit={(values, { setSubmitting }) => {
           nProgress.start();
+          const inviteRole = isInviteTeacher ? "teacher" : "student";
           const dataInvite = {
             to: values.email,
-            subject: "wellcome",
+            subject: `Lời mời tham gia lớp học: ${infoClass.name}`,
             title: "test send mail",
-            body: "ahihi do ngoc",
-            type: "wellcome",
+            body: "test send mail body",
+            type: "invite-join-class",
+            info: JSON.stringify({
+              url: window.location.origin + `/classes/invite/${infoClass.id}?role=${inviteRole}`,
+              teacherName: me.name,
+              className: infoClass.name,
+              teacherEmail: me.email
+            })
           }
           setTimeout(() => {
-            dispatch(inviteJoinClass(dataInvite));
+            emailService.inviteJoinClass(dataInvite);
             setSubmitting(true);
             nProgress.done();
             handleClose();

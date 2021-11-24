@@ -4,6 +4,7 @@ import {
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT,
+  GET_ME_INFO
 } from "../actions/types";
 
 const initialState = {
@@ -42,6 +43,12 @@ export default function authReducer(state = initialState, action) {
         ...state,
         isLoggedIn: false,
         user: null,
+      };
+    case GET_ME_INFO:
+      return {
+        ...state,
+        isLoggedIn: true,
+        me: payload,
       };
     default:
       return state;

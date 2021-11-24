@@ -34,13 +34,17 @@ export default function DetailClass() {
         setTeacherData(makeData(response?.data))
       });
   }, [])
-
+  console.log(history);
   const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
   if (!data) {
     nProgress.start();
   } else {
     nProgress.done();
   }
+  const getInfoClass = () => data;
+  console.log("data: ", data);
+
+
   const studentColumns = React.useMemo(
     () => [
       {
@@ -168,7 +172,7 @@ export default function DetailClass() {
       </Row>
       <TableInfoUser columns={studentColumns} data={studentData} />
 
-      <InviteClassModal handleClose={handleCloseInviteModal} show={showInviteModal} isInviteTeacher={isInviteTeacher} />
+      <InviteClassModal handleClose={handleCloseInviteModal} show={showInviteModal} isInviteTeacher={isInviteTeacher} getInfoClass={getInfoClass} />
     </Container>
   )
 }
