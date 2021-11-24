@@ -23,8 +23,8 @@ const loginSchema = yup.object({
 });
 
 const initialLoginValues = {
-  username: "teacher3@gmail.com",
-  password: "teacher123",
+  username: "",
+  password: "",
 };
 
 const LoginScreen = () => {
