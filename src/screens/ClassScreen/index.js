@@ -23,7 +23,6 @@ function ClassScreen() {
 
   const offset = history.location.search.split('&')[0].split('=')[1];
   const limit = history.location.search.split('&')[1].split('=')[1];
-  console.log(offset, limit, 'offset-limit');
   const listClass = () => {
     const newClass = classes.slice(limit*(offset - 1), limit*(offset));
     return newClass.map((element, index) => {

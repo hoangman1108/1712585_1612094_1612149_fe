@@ -11,6 +11,10 @@ const detailClass = (id) => {
   return axios.get(API_URL + `/classes/${id}`, { headers: authHeader() });
 };
 
+const checkUserInClass=(classId, userId)=>{
+  return axios.get(API_URL + `/classes/${classId}/checkUser`, { headers: authHeader() });
+}
+
 const createClass = (data) => {
   return axios.post(API_URL + "/classes", data, { headers: authHeader() });
 }
@@ -28,7 +32,8 @@ const classService = {
   deleteClass,
   createClass,
   joinClass,
-  detailClass
+  detailClass,
+  checkUserInClass
 };
 
 export default classService;
