@@ -139,7 +139,6 @@ const RegisterScreen = (props) => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.mssv}
-                    required={true}
                     name="mssv"
                   />
                 </Form.Group>
