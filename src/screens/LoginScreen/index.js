@@ -11,7 +11,11 @@ import { Redirect } from "react-router";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 import authService from "../../services/auth.service";
-import { SET_INFO_REGISTER, LOGIN_SUCCESS } from "../../redux/actions/types";
+import {
+  RESET_INFO_REGISTER,
+  SET_INFO_REGISTER,
+  LOGIN_SUCCESS,
+} from "../../redux/actions/types";
 
 const loginSchema = yup.object({
   username: yup.string().required(),
@@ -28,6 +32,8 @@ const LoginScreen = () => {
   const { message } = useSelector((state) => state.message);
 
   const dispatch = useDispatch();
+
+  dispatch({ type: RESET_INFO_REGISTER });
 
   const responseGoogle = async (e) => {
     const { profileObj } = e;
