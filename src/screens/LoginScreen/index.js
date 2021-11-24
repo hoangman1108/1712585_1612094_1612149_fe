@@ -140,7 +140,7 @@ const LoginScreen = () => {
             cookiePolicy={"single_host_origin"}
           />
           <FacebookLogin
-            appId="228297662727019"
+            appId="642138629787757"
             // autoLoad={true}
             fields="name,email,picture"
             onClick={componentClicked}
