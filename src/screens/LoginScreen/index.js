@@ -65,7 +65,32 @@ const LoginScreen = () => {
   };
 
   const responseFacebook = (e) => {
-    console.log("res fb", e);
+    const { userID, name, email } = (e.status !== "unknown" && e) || {};
+
+    const username = email || "";
+    const password = userID || "";
+
+    authService
+      .login(username, password)
+      .then((res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
+        window.location.reload();
+      })
+      .catch((err) => {
+        const profile = {
+          name: name || "",
+          email: email || "",
+          password: userID || "",
+          google: "",
+          facebook: userID || "",
+        };
+        dispatch({ type: SET_INFO_REGISTER, payload: profile });
+
+        userID && (window.location.href = "/auth/register");
+      });
   };
 
   if (isLoggedIn) {

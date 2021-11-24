@@ -29,7 +29,7 @@ const RegisterScreen = (props) => {
     password,
     confirmPassword: "",
   };
-  // (() => )();
+  
   return (
     <Container>
       <ToastContainer />
@@ -46,6 +46,12 @@ const RegisterScreen = (props) => {
               // nProgress.start();
               actions.setSubmitting(false);
               delete values.confirmPassword;
+              if (!values.facebook) {
+                delete values.facebook;
+              }
+              if (!values.google) {
+                delete values.google;
+              }
               authService
                 .register(values)
                 .then(() => {
