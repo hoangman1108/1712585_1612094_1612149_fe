@@ -13,7 +13,7 @@ export default function Management() {
       <Row className="mt-1">
         <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
           <h1 className="text-success fw-bold text-center rounded">
-            Management
+          Profile
           </h1>
 
           <Formik

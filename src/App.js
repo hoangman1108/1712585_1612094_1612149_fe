@@ -64,7 +64,7 @@ function App() {
       component: () => <JoinClass />,
     },
     {
-      path: '/management',
+      path: '/profile',
       component: () => <Management />,
     }
   ]

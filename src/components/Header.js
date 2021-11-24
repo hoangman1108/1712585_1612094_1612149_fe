@@ -58,10 +58,10 @@ export default function Header() {
             <Nav className="justify-content-end flex-grow-1 bg-navbar">
               <Nav.Link
                 className="custom-nav-link text-light px-3"
-                href="/management"
+                href="/profile"
               >
                 <FontAwesomeIcon className="color-iCoin" icon={faTasks} />
-                {" "} Management
+                {" "} Profile
                 <FontAwesomeIcon
                   className="color-iCoin float-end"
                   icon={faAngleRight}
