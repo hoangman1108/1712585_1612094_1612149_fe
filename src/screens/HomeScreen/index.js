@@ -31,7 +31,7 @@ export default function ControlledCarousel() {
         variant="success"
         
         onClick={()=>{
-          history.push('/classes');
+          history.push('/classes?offset=1&limit=6');
         }}
         >Visit</Button>
           {/* <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p> */}
