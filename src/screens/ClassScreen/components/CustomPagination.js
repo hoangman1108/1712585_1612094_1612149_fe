@@ -17,7 +17,7 @@ export default function CustomPagination({length, offset, limit, history}) {
   }
   return (
     <div>
-      <Pagination>
+      <Pagination className="justify-content-center">
         {items}
       </Pagination>
     </div>
