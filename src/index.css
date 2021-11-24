@@ -15,3 +15,7 @@ code {
 #nprogress .bar {
   background: rgb(23, 252, 11) !important;
   }
+
+  .h-img-carousel {
+    height: 93.4vh;
+  }
