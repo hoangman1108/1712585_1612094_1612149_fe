@@ -1,13 +1,14 @@
 import React from "react";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
 import { Formik } from "formik";
-import nProgress from "nprogress";
+import { connect } from "react-redux";
 
-const RegisterScreen = () => {
+const RegisterScreen = (props) => {
+  console.log("props register day", props);
   const initialLoginValues = {
     name: "",
     dob: "",
-    // role": "string",
+    role: "string",
     email: "",
     mssv: "",
     phone: "",
@@ -40,9 +41,14 @@ const RegisterScreen = () => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.name}
-                    required = {true}
+                    required={true}
                     name="name"
                   />
+                  {props.errors.name && (
+                    <Form.Text className="text-danger">
+                      {props.errors.name}
+                    </Form.Text>
+                  )}
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Date of birth</Form.Label>
@@ -53,9 +59,23 @@ const RegisterScreen = () => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.dob}
-                    required = {true}
+                    required={true}
                     name="dob"
                   />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                  <Form.Label>Role</Form.Label>
+                  <Form.Select
+                    type="select"
+                    onChange={props.handleChange}
+                    onBlur={props.handleBlur}
+                    value={props.values.role}
+                    required={true}
+                    name="role"
+                  >
+                    <option value="student">student</option>
+                    <option value="teacher">teacher</option>
+                  </Form.Select>
                 </Form.Group>
                 <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
@@ -66,7 +86,7 @@ const RegisterScreen = () => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.email}
-                    required = {true}
+                    required={true}
                     name="email"
                   />
                 </Form.Group>
@@ -79,7 +99,7 @@ const RegisterScreen = () => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.mssv}
-                    required = {true}
+                    required={true}
                     name="mssv"
                   />
                 </Form.Group>
@@ -92,7 +112,7 @@ const RegisterScreen = () => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.phone}
-                    required = {true}
+                    required={true}
                     name="phone"
                   />
                 </Form.Group>
@@ -115,7 +135,7 @@ const RegisterScreen = () => {
                     onChange={props.handleChange}
                     onBlur={props.handleBlur}
                     value={props.values.confirmPassword}
-                    required = {true}
+                    required={true}
                     name="confirmPassword"
                   />
                 </Form.Group>
@@ -144,5 +164,7 @@ const RegisterScreen = () => {
     </Container>
   );
 };
-
-export default RegisterScreen;
+const mapStateToProps = (state) => ({
+  infoUserRegister: state.infoUserRegister,
+});
+export default connect(mapStateToProps)(RegisterScreen);

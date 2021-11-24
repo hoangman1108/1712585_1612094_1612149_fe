@@ -10,7 +10,8 @@ import convertMessage from "../../utils/converMessage";
 import { Redirect } from "react-router";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
-import axios from "axios";
+import authService from "../../services/auth.service";
+import {SET_INFO_REGISTER, RESET_INFO_REGISTER} from '../../redux/actions/types'
 
 const loginSchema = yup.object({
   username: yup.string().required(),
@@ -28,31 +29,25 @@ const LoginScreen = () => {
 
   const dispatch = useDispatch();
 
-  console.log("process.env", process.env.CLIENT_ID);
-  const responseGoogle = (e) => {
+  const responseGoogle = async (e) => {
     const { profileObj } = e;
-    console.log("res", e);
-    console.log("accessToken", profileObj);
 
-    const profile = {
-      name: profileObj.name,
-      role: "student",
-      email: profileObj.email,
-      password: profileObj.googleId,
-      facebook: "string",
-      google: profileObj.googleId,
-    };
     const username = profileObj.email;
-    const password = profileObj.googleId;
+    const password = "profileObj.googleId";
 
-    dispatch(login(username, password))
-      .then(() => {
-        nProgress.done();
-        window.location.reload();
+    authService
+      .login(username, password)
+      .then((res) => {
+        console.log("res login", res);
       })
-      .catch(() => {
-        nProgress.done();
-        // setLoading(false);
+      .catch((err) => {
+        const profile = {
+          name: profileObj.name,
+          email: profileObj.email,
+          password: profileObj.googleId,
+          google: profileObj.googleId,
+        };
+        dispatch({ type: SET_INFO_REGISTER, payload: profile });
       });
   };
 
@@ -164,7 +159,7 @@ const LoginScreen = () => {
             cookiePolicy={"single_host_origin"}
           />
           <FacebookLogin
-            appId="642138629787757"
+            appId="228297662727019"
             // autoLoad={true}
             fields="name,email,picture"
             onClick={componentClicked}

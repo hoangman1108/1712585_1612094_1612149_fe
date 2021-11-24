@@ -2,37 +2,31 @@ import React, { useEffect, useState } from "react";
 import nProgress from "nprogress";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
-import { Formik } from 'formik';
+import { Formik } from "formik";
 import userService from "../../../services/user.service";
 import { createClass } from "../../../redux/actions/class.action";
 export default function AddClassModel({ show, handleClose }) {
   const [teachers, setTeachers] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
-    userService.getUserByRole('teacher')
-      .then(value => {
-        if (value.data) {
-          setTeachers(value.data)
-        }
-      })
-  }, [])
+    userService.getUserByRole("teacher").then((value) => {
+      if (value.data) {
+        setTeachers(value.data);
+      }
+    });
+  }, []);
 
   return (
-    <Modal
-      show={show}
-      onHide={handleClose}
-      backdrop="static"
-      keyboard={false}
-    >
+    <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
       <Formik
-        initialValues={{ name: '', teacher: undefined }}
-        validate={values => {
+        initialValues={{ name: "", teacher: undefined }}
+        validate={(values) => {
           const errors = {};
           if (!values.name) {
-            errors.name = 'Field name is required';
+            errors.name = "Field name is required";
           }
           if (!values.teacher) {
-            errors.teacher = 'Field teacher is required';
+            errors.teacher = "Field teacher is required";
           }
           return errors;
         }}
@@ -42,7 +36,7 @@ export default function AddClassModel({ show, handleClose }) {
             name: values.name,
             teachers: [values.teacher],
             codeJoin: "1234",
-          }
+          };
           setTimeout(() => {
             dispatch(createClass(dataCreate));
             setSubmitting(true);
@@ -67,19 +61,22 @@ export default function AddClassModel({ show, handleClose }) {
             <Modal.Body>
               <Form.Group className="mb-3">
                 <Form.Label>Tên lớp học</Form.Label>
-                <Form.Control type="text"
+                <Form.Control
+                  type="text"
                   name="name"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.name}
-                  placeholder="10A3" />
+                  placeholder="10A3"
+                />
                 <Form.Text className="text-error">
-                  {(errors.name && touched.name && errors.name)}
+                  {errors.name && touched.name && errors.name}
                 </Form.Text>
               </Form.Group>
               <Form.Group className="mb-3">
                 <Form.Label>Tên GVCN</Form.Label>
-                <Form.Select name="teacher"
+                <Form.Select
+                  name="teacher"
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.teacher}
@@ -87,9 +84,11 @@ export default function AddClassModel({ show, handleClose }) {
                   as="select"
                 >
                   <option>Chọn giáo viên</option>
-                  {
-                    teachers.map((teacher, index) => (<option key={index} value={teacher.id}>{teacher.name}</option>))
-                  }
+                  {teachers.map((teacher, index) => (
+                    <option key={index} value={teacher.id}>
+                      {teacher.name}
+                    </option>
+                  ))}
                 </Form.Select>
                 {/* <Form.Control type="text"
                   name="teacher"
@@ -114,14 +113,18 @@ export default function AddClassModel({ show, handleClose }) {
                   {errors.quantity && touched.quantity && errors.quantity}
                 </Form.Text>
               </Form.Group> */}
-
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="outline-secondary"
-                onClick={handleClose}>
+              <Button variant="outline-secondary" onClick={handleClose}>
                 Đóng
               </Button>
-              <Button variant="outline-success" type="submit" disabled={isSubmitting}>Thêm</Button>
+              <Button
+                variant="outline-success"
+                type="submit"
+                disabled={isSubmitting}
+              >
+                Thêm
+              </Button>
             </Modal.Footer>
           </Form>
         )}
