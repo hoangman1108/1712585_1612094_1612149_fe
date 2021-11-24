@@ -187,10 +187,11 @@ const LoginScreen = () => {
           </Formik>
           <GoogleLogin
             clientId="821562410080-eijar72ipfckaegtgibojd4gmbnbph00.apps.googleusercontent.com"
-            buttonText="Login"
+            buttonText="Login with Google"
             onSuccess={responseGoogle}
             onFailure={responseGoogle}
             cookiePolicy={"single_host_origin"}
+            className="w-100 justify-content-center"
           />
           <FacebookLogin
             appId="228297662727019"
@@ -198,7 +199,6 @@ const LoginScreen = () => {
             fields="name,email,picture"
             callback={responseFacebook}
           />
-          ,
         </Col>
       </Row>
     </Container>
