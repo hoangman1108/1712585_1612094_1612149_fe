@@ -3,16 +3,17 @@ import React, { useEffect, useState } from 'react'
 import { Container, Alert, Row, Col } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import userService from '../../services/user.service';
 import TabsDetail from '../ClassScreen/components/TabsDetail';
 import makeData from './components/makeData';
 import TableInfoUser from './components/TableInfoUser';
 import { BsFillPersonPlusFill } from "react-icons/bs";
 import InviteClassModal from './components/InviteClassModal';
+import classService from '../../services/class.service';
 
 export default function DetailClass() {
   const history = useHistory();
   const { classes } = useSelector(state => state.class)
+  const { me } = useSelector(state => state.auth)
   const [studentData, setStudentData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
   const [isInviteTeacher, setIsInviteTeacher] = useState(false);
@@ -23,27 +24,21 @@ export default function DetailClass() {
     setIsInviteTeacher(inviteObject === "inviteTeacher" ? true : false);
   }
 
-  // console.log(teacherData, 'teacherData');
   useEffect(() => {
-    userService.getUserByRole("student")
-      .then((response) => {
-        setStudentData(makeData(response?.data))
-      });
-    userService.getUserByRole("teacher")
-      .then((response) => {
-        setTeacherData(makeData(response?.data))
-      });
+    classService.detailClass(history.location.pathname.split('/')[2])
+      .then(response => {
+        setStudentData(makeData(response?.data?.students));
+        setTeacherData(makeData(response?.data?.teachers))
+      })
   }, [])
-  console.log(history);
-  console.log("classes: ", classes);
   const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
+  console.log(data);
   if (!data) {
     nProgress.start();
   } else {
     nProgress.done();
   }
   const getInfoClass = () => data;
-  console.log("data: ", data);
 
 
   const studentColumns = React.useMemo(
@@ -126,9 +121,6 @@ export default function DetailClass() {
     []
   )
 
-  // console.log(data?.students);
-
-
   return (
     <Container>
       <TabsDetail />
@@ -148,27 +140,33 @@ export default function DetailClass() {
         <Col>
           <h5 className="fw-bold">Danh sách Giáo viên</h5>
         </Col>
-        <Col>
-          <BsFillPersonPlusFill 
-            className="h4 float-end"
-            name="inviteTeacher"
-            onClick={handleShowInviteModal.bind(this, "inviteTeacher")}
-          />
-        </Col>
+        {
+          me.role === "teacher" && (<Col>
+            <BsFillPersonPlusFill
+              className="h4 float-end"
+              name="inviteTeacher"
+              onClick={handleShowInviteModal.bind(this, "inviteTeacher")}
+            />
+          </Col>)
+        }
       </Row>
       <TableInfoUser columns={teacherColumns} data={teacherData} />
-      
-      
+
+
       <Row className="mt-5">
         <Col>
           <h5 className="fw-bold">Danh sách sinh viên</h5>
         </Col>
         <Col>
-          <BsFillPersonPlusFill 
-            className="h4 cursor-pointer float-end" 
-            name="inviteStudent"
-            onClick={handleShowInviteModal.bind(this, "inviteStudent")}
-          />
+          {
+            me.role === "teacher" && (<BsFillPersonPlusFill
+              className="h4 cursor-pointer float-end"
+              name="inviteStudent"
+              onClick={handleShowInviteModal.bind(this, "inviteStudent")}
+            />
+            )
+          }
+          
         </Col>
       </Row>
       <TableInfoUser columns={studentColumns} data={studentData} />

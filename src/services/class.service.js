@@ -7,6 +7,10 @@ const getAllClass = () => {
   return axios.get(API_URL + "/classes", { headers: authHeader() });
 };
 
+const detailClass = (id) => {
+  return axios.get(API_URL + `/classes/${id}`, { headers: authHeader() });
+};
+
 const createClass = (data) => {
   return axios.post(API_URL + "/classes", data, { headers: authHeader() });
 }
@@ -15,15 +19,16 @@ const deleteClass = (id) => {
   return axios.delete(API_URL + `/classes/${id}`, { headers: authHeader() });
 }
 
-const joinClass = (userID, classID) => {
-  return true;
+const joinClass = (data) => {
+  return axios.post(API_URL + "/classes/joinClass", data, { headers: authHeader() });
 }
 
 const classService = {
   getAllClass,
   deleteClass,
   createClass,
-  joinClass
+  joinClass,
+  detailClass
 };
 
 export default classService;
