@@ -35,6 +35,7 @@ export default function DetailClass() {
       });
   }, [])
   console.log(history);
+  console.log("classes: ", classes);
   const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
   if (!data) {
     nProgress.start();

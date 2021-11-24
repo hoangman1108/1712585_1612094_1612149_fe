@@ -15,10 +15,15 @@ const deleteClass = (id) => {
   return axios.delete(API_URL + `/classes/${id}`, { headers: authHeader() });
 }
 
+const joinClass = (userID, classID) => {
+  return true;
+}
+
 const classService = {
   getAllClass,
   deleteClass,
   createClass,
+  joinClass
 };
 
 export default classService;
