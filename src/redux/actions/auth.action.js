@@ -6,9 +6,9 @@ import {
   LOGOUT,
   SET_MESSAGE,
 } from "./types";
-import authService from '../../services/auth.service';
+import authService from "../../services/auth.service";
 
-export const register = (data) => dispatch => {
+export const register = (data) => (dispatch) => {
   return authService.register(data).then(
     (response) => {
       dispatch({
@@ -17,7 +17,7 @@ export const register = (data) => dispatch => {
       dispatch({
         type: SET_MESSAGE,
         payload: response.data.message,
-      })
+      });
       return Promise.resolve();
     },
     (error) => {
@@ -37,10 +37,10 @@ export const register = (data) => dispatch => {
       });
       return Promise.reject();
     }
-  )
-}
+  );
+};
 
-export const login = (username, password) => dispatch => {
+export const login = (username, password) => (dispatch) => {
   return authService.login(username, password).then(
     (data) => {
       dispatch({
@@ -66,10 +66,10 @@ export const login = (username, password) => dispatch => {
       });
       return Promise.reject();
     }
-  )
-}
+  );
+};
 
-export const me = () => dispatch => {
+export const me = () => (dispatch) => {
   return authService.me().then(
     (data) => {
       return Promise.resolve();
@@ -86,8 +86,8 @@ export const me = () => dispatch => {
       });
       return Promise.reject();
     }
-  )
-}
+  );
+};
 export const logout = () => (dispatch) => {
   dispatch({
     type: LOGOUT,

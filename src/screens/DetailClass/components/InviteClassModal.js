@@ -3,19 +3,9 @@ import nProgress from "nprogress";
 import { Modal, Button, Form } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import { Formik } from 'formik';
-import userService from "../../../services/user.service";
-import { createClass } from "../../../redux/actions/class.action";
+import { inviteJoinClass } from "../../../redux/actions/email.action";
 export default function InviteClassModal({ show, handleClose, isInviteTeacher }) {
-  const [teachers, setTeachers] = useState([]);
   const dispatch = useDispatch();
-  useEffect(() => {
-    userService.getUserByRole('teacher')
-      .then(value => {
-        if (value.data) {
-          setTeachers(value.data)
-        }
-      })
-  }, [])
 
   return (
     <Modal
@@ -36,10 +26,14 @@ export default function InviteClassModal({ show, handleClose, isInviteTeacher })
         onSubmit={(values, { setSubmitting }) => {
           nProgress.start();
           const dataInvite = {
-            email: values.email
+            to: values.email,
+            subject: "wellcome",
+            title: "test send mail",
+            body: "ahihi do ngoc",
+            type: "wellcome",
           }
           setTimeout(() => {
-            dispatch(createClass(dataInvite));
+            dispatch(inviteJoinClass(dataInvite));
             setSubmitting(true);
             nProgress.done();
             handleClose();
@@ -69,7 +63,7 @@ export default function InviteClassModal({ show, handleClose, isInviteTeacher })
                   value={values.email}
                   placeholder="abcxyz@gmail.com" />
                 <Form.Text className="text-error">
-                  {(errors.name && touched.name)}
+                  {(errors.email && touched.email && errors.email)}
                 </Form.Text>
               </Form.Group>
             </Modal.Body>
