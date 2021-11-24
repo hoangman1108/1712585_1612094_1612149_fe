@@ -29,7 +29,7 @@ const RegisterScreen = (props) => {
     password,
     confirmPassword: "",
   };
-  
+
   return (
     <Container>
       <ToastContainer />
@@ -124,7 +124,10 @@ const RegisterScreen = (props) => {
                     name="email"
                   />
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group
+                  className="mb-3"
+                  hidden={props.values.role === "student" ? false : true}
+                >
                   <Form.Label>Mã số</Form.Label>
                   <Form.Control
                     className="focus-success"
