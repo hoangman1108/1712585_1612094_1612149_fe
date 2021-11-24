@@ -11,7 +11,7 @@ import { Redirect } from "react-router";
 import GoogleLogin from "react-google-login";
 import FacebookLogin from "react-facebook-login";
 import authService from "../../services/auth.service";
-import { SET_INFO_REGISTER } from "../../redux/actions/types";
+import { SET_INFO_REGISTER, LOGIN_SUCCESS } from "../../redux/actions/types";
 
 const loginSchema = yup.object({
   username: yup.string().required(),
@@ -38,6 +38,10 @@ const LoginScreen = () => {
     authService
       .login(username, password)
       .then((res) => {
+        dispatch({
+          type: LOGIN_SUCCESS,
+          payload: res.data,
+        });
         window.location.reload();
       })
       .catch((err) => {
@@ -76,7 +80,7 @@ const LoginScreen = () => {
               dispatch(login(username, password))
                 .then(() => {
                   nProgress.done();
-                  window.location.reload();
+                  // window.location.reload();
                 })
                 .catch(() => {
                   nProgress.done();
