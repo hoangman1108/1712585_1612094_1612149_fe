@@ -10,7 +10,6 @@ export const GET_ME_SUCCESS = "GET_ME_SUCCESS";
 export const GET_ME_FAIL = "GET_ME_FAIL";
 export const GET_ME_INFO = "GET_ME_INFO";
 
-
 export const SET_MESSAGE = "SET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
@@ -26,3 +25,5 @@ export const DELETE_CLASS_FAIL = "DELETE_CLASS_FAIL";
 export const INVITE_SUCCESS = "INVITE_SUCCESS";
 export const INVITE_FAIL = "INVITE_FAIL";
 
+export const SET_INFO_REGISTER = "SET_INFO_REGISTER";
+export const RESET_INFO_REGISTER = "RESET_INFO_REGISTER";
