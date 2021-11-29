@@ -41,8 +41,12 @@ export default function GradeStructureClass() {
         console.log(id);
     }
 
-    const assigmentEdit = (id) => {
-
+    const assigmentEdit = (data) => {
+        console.log("EDIT");
+        classService.updateAssigments(data)
+        .then((response) => {
+            console.log("edit: ", response.data);
+        });
     }
 
     const assigmentAdd = (data) => {
@@ -51,12 +55,12 @@ export default function GradeStructureClass() {
 
     return (
         <Container>
-            <Row span={24} className="text-center">
+            <Row className="text-center">
                 <Col>
                     <h2>Grade structure</h2>
                 </Col>
             </Row>
-            <Row span={24} className="mt-4">
+            <Row className="mt-4">
                 {assigmentData.map(assigment => {
                     return <CardAssigment
                         classID={data.id}

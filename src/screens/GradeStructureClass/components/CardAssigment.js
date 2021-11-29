@@ -7,20 +7,30 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
     const [isEdit, setIsEdit] = useState(false);
 
     const handleSubmitForm = (values, { setSubmitting }) => {
-        if (info.id && isEdit) {
-            nProgress.start();
-            setSubmitting(true);
-            const dataEdit = {
-                name: values.name,
-                score: values.score,
-                classId: classID
-            };
-            setTimeout(() => {
-                handleEdit(dataEdit);
+        if (info.id) {
+            const form = document.querySelector(`[name=${info.id}]`);
+            const inputs = form.querySelectorAll('input.form-control');
+            if (isEdit) {
+                nProgress.start();
+                setSubmitting(true);
+                const dataEdit = {
+                    name: values.name,
+                    score: values.score,
+                    id: info.id
+                };
+                setTimeout(() => {
+                    handleEdit(dataEdit);
+                    inputs.forEach(input => input.setAttribute('readonly', ''));
+                    setSubmitting(false);
+                    nProgress.done();
+                }, 500);
+            } else {
                 setSubmitting(false);
-                nProgress.done();
-            }, 500);
+                inputs.forEach(input => input.removeAttribute('readonly'));
+            }
+            setIsEdit(isEdit ? false : true);
         } else if (!info.id) {
+            nProgress.start();
             setSubmitting(true);
             const dataAdd = {
                 name: values.name,
@@ -60,50 +70,63 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
                     handleSubmit,
                     isSubmitting,
                 }) => (
-                    <Form onSubmit={handleSubmit}>
-                        <Form.Group className="mb-2">
-                            <Form.Label>Assigment name</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.name}
-                                readOnly={isEdit} />
-                            <Form.Text className="text-error">
-                                {(errors.name && touched.name && errors.name)}
-                            </Form.Text>
+                    <Form onSubmit={handleSubmit} name={info.id}>
+                        <Form.Group className="mb-2 mt-2">
+                            <Row className="align-items-center">
+                                <Col xs={4} lg={2}>
+                                    <Form.Label>Assigment name:</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        name="name"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.name}
+                                        readOnly />
+                                    <Form.Text className="text-error">
+                                        {(errors.name && touched.name && errors.name)}
+                                    </Form.Text>
+                                </Col>
+                            </Row>
                         </Form.Group>
                         <Form.Group className="mb-3">
-                            <Form.Label>Assigment score</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="score"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={values.score}
-                                readOnly={isEdit} />
-                            <Form.Text className="text-error">
-                                {(errors.score && touched.score && errors.score)}
-                            </Form.Text>
+                            <Row className="align-items-center">
+                                <Col xs={4} lg={2}>
+                                    <Form.Label>Assigment score:</Form.Label>
+                                </Col>
+                                <Col>
+                                    <Form.Control
+                                        type="text"
+                                        name="score"
+                                        onChange={handleChange}
+                                        onBlur={handleBlur}
+                                        value={values.score}
+                                        readOnly />
+                                    <Form.Text className="text-error">
+                                        {(errors.score && touched.score && errors.score)}
+                                    </Form.Text>
+                                </Col>
+                            </Row>
                         </Form.Group>
                         <Form.Group className="mb-3">
                             {
                                 info.id && (
-                                    <Row xs={2} md={4} lg={6}>
-                                        <Col>
-                                            <Button 
-                                                type="submit" 
-                                                disabled={isSubmitting} 
-                                                variant={isEdit ? "success" : "primary"} 
-                                                onClick={handleEdit.bind()}>
-                                                {isEdit ? "Save" : "Edit"}
-                                            </Button>
-                                            <Button 
+                                    <Row>
+                                        <Col></Col>
+                                        <Col className="d-flex justify-content-end">
+                                            <Button
                                                 variant="danger"
-                                                className="ms-2"
                                                 onClick={handleDelete.bind(this, info.id)}>
                                                 Delete
+                                            </Button>
+                                            <Button
+                                                type="submit"
+                                                className="ms-2"
+                                                disabled={isSubmitting}
+                                                variant={isEdit ? "success" : "primary"}
+                                                >
+                                                {isEdit ? "Save" : "Edit"}
                                             </Button>
                                         </Col>
                                     </Row>

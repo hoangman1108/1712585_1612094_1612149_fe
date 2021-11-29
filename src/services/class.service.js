@@ -30,6 +30,10 @@ const getAssigments = (classId) => {
   return axios.get(API_URL + `/classes/${classId}/assignments`, { headers: authHeader() });
 }
 
+const updateAssigments = (data) => {
+  return axios.put(API_URL + `/assignments/${data.id}`, data, { headers: authHeader() });
+}
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -37,7 +41,8 @@ const classService = {
   joinClass,
   detailClass,
   checkUserInClass,
-  getAssigments
+  getAssigments,
+  updateAssigments
 };
 
 export default classService;
