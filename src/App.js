@@ -15,6 +15,7 @@ import JoinClass from "./screens/JoinClass";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "./redux/actions/auth.action";
 import AssignmentClass from "./screens/AssignmentClass";
+import GradeStructureClass from "./screens/GradeStructureClass";
 import { getListClass } from "./redux/actions/class.action";
 
 function App() {
@@ -56,12 +57,12 @@ function App() {
       component: () => <AssignmentClass />,
     },
     {
-      path: '/classes',
-      component: () => <ClassScreen />,
+      path: '/classes/:id/grade',
+      component: () => <GradeStructureClass />,
     },
     {
-      path: '/classes/invite/:id',
-      component: () => <JoinClass />,
+      path: '/classes',
+      component: () => <ClassScreen />,
     },
     {
       path: '/profile',
