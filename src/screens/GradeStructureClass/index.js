@@ -39,6 +39,15 @@ export default function GradeStructureClass() {
 
     const assigmentDelete = (id) => {
         console.log(id);
+        classService.deleteAssigments(id)
+        .then((response) => {
+            if (response.data === "DELETED") {
+                console.log("assigments: ", response.data);
+                setAssigmentData(assigmentData.filter(assigment => assigment.id != id));
+            } else {
+                console.log("deleted failed");
+            }
+        });
     }
 
     const assigmentEdit = (data) => {

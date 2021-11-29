@@ -8,7 +8,7 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
 
     const handleSubmitForm = (values, { setSubmitting }) => {
         if (info.id) {
-            const form = document.querySelector(`[name=${info.id}]`);
+            const form = document.querySelector(`[name='${info.id}']`);
             const inputs = form.querySelectorAll('input.form-control');
             if (isEdit) {
                 nProgress.start();
