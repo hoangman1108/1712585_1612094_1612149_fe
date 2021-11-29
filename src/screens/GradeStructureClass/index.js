@@ -18,10 +18,10 @@ export default function GradeStructureClass() {
     } else {
         nProgress.done();
     }
- 
+
     const [assigmentData, setAssigmentData] = useState([]);
 
-    console.log(data);
+    console.log("classes: ", data);
     useEffect(() => {
         if (data?.id) {
             const dataUsers = me.role === "teacher" ? data.teachers : data.students;
@@ -29,10 +29,10 @@ export default function GradeStructureClass() {
             if (userExisted) {
                 console.log(me);
                 classService.getAssigments(data.id)
-                .then(response => {
-                    console.log("assigments: ", response.data);
-                    setAssigmentData(response.data);
-                });
+                    .then(response => {
+                        console.log("assigments: ", response.data);
+                        setAssigmentData(response.data);
+                    });
             };
         }
     }, [data?.id]);
@@ -40,26 +40,34 @@ export default function GradeStructureClass() {
     const assigmentDelete = (id) => {
         console.log(id);
         classService.deleteAssigments(id)
-        .then((response) => {
-            if (response.data === "DELETED") {
-                console.log("assigments: ", response.data);
-                setAssigmentData(assigmentData.filter(assigment => assigment.id != id));
-            } else {
-                console.log("deleted failed");
-            }
-        });
+            .then((response) => {
+                if (response.data === "DELETED") {
+                    console.log("assigments: ", response.data);
+                    setAssigmentData(assigmentData.filter(assigment => assigment.id != id));
+                } else {
+                    console.log("deleted failed");
+                }
+            });
     }
 
     const assigmentEdit = (data) => {
         console.log("EDIT");
         classService.updateAssigments(data)
-        .then((response) => {
-            console.log("edit: ", response.data);
-        });
+            .then((response) => {
+                console.log("edit: ", response.data);
+            });
     }
 
     const assigmentAdd = (data) => {
-
+        console.log("ADD");
+        classService.addAssigments(data)
+            .then((response) => {
+                if (response.data?.id) {
+                    console.log("add: ", response.data);
+                    setAssigmentData([...assigmentData, response.data]);
+                }
+                
+            });
     }
 
     return (
@@ -74,12 +82,18 @@ export default function GradeStructureClass() {
                     return <CardAssigment
                         classID={data.id}
                         info={assigment}
-                        handleAdd={assigmentAdd}
                         handleEdit={assigmentEdit}
                         handleDelete={assigmentDelete}
                         key={assigment.id ? assigment.id : ""}
                     />
                 })}
+
+                {data?.id && <CardAssigment
+                        classID={data.id}
+                        handleAdd={assigmentAdd}
+                        info={{ id: null }}
+                    />
+                }
             </Row>
         </Container>
     )

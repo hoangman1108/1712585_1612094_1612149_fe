@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import nProgress from "nprogress";
-import { Card, Col, Row, Button, InputGroup, FormControl, Form } from 'react-bootstrap';
+import { Card, Col, Row, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
 
-export default function CardAssigment({ classID, info, handleAdd, handleEdit, handleDelete }) {
-    const [isEdit, setIsEdit] = useState(false);
-
+export default function CardAssigment({ classID, info, handleAdd = null, handleEdit = null, handleDelete = null}) {
+    const [isEdit, setIsEdit] = useState(info.id ? false : true);
+    const [isAdd, setIsAdd] = useState(info.id ? true : false);
+    
     const handleSubmitForm = (values, { setSubmitting }) => {
         if (info.id) {
             const form = document.querySelector(`[name='${info.id}']`);
@@ -39,6 +40,8 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
             };
             setTimeout(() => {
                 handleAdd(dataAdd);
+                values.name = "";
+                values.score = "";
                 setSubmitting(false);
                 nProgress.done();
             }, 500);
@@ -48,7 +51,7 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
     return (
         <Card className="mb-3">
             <Formik
-                initialValues={{ name: info.name, score: info.score }}
+                initialValues={{ name: info?.name, score: info?.score }}
                 validate={(values) => {
                     const errors = {};
                     if (!values.name) {
@@ -83,7 +86,7 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.name}
-                                        readOnly />
+                                        readOnly={isAdd} />
                                     <Form.Text className="text-error">
                                         {(errors.name && touched.name && errors.name)}
                                     </Form.Text>
@@ -102,7 +105,7 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
                                         onChange={handleChange}
                                         onBlur={handleBlur}
                                         value={values.score}
-                                        readOnly />
+                                        readOnly={isAdd} />
                                     <Form.Text className="text-error">
                                         {(errors.score && touched.score && errors.score)}
                                     </Form.Text>
@@ -135,7 +138,16 @@ export default function CardAssigment({ classID, info, handleAdd, handleEdit, ha
                             {
                                 !info.id && (
                                     <Row>
-                                        <Button type="submit" disabled={isSubmitting} variant="success">Add</Button>
+                                        <Col>
+                                            <Button 
+                                                type="submit" 
+                                                disabled={isSubmitting} 
+                                                variant="success"
+                                                style={{ width: '100%' }}
+                                                >
+                                                    Add
+                                                </Button>
+                                        </Col>
                                     </Row>
                                 )
                             }

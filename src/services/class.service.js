@@ -38,6 +38,10 @@ const deleteAssigments = (id) => {
   return axios.delete(API_URL + `/assignments/${id}`, { headers: authHeader() });
 }
 
+const addAssigments = (data) => {
+  return axios.post(API_URL + "/assignments", data, { headers: authHeader() });
+}
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -47,7 +51,8 @@ const classService = {
   checkUserInClass,
   getAssigments,
   updateAssigments,
-  deleteAssigments
+  deleteAssigments,
+  addAssigments
 };
 
 export default classService;
