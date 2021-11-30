@@ -9,7 +9,6 @@ import CardAssigment from "./components/CardAssigment";
 export default function GradeStructureClass() {
     const history = useHistory();
     const { classes } = useSelector(state => state.class);
-    console.log(classes);
     const { me } = useSelector(state => state.auth);
     const pathName = history.location.pathname.split('/');
     const data = classes.find(element => element.id === pathName[2]);
@@ -21,13 +20,11 @@ export default function GradeStructureClass() {
 
     const [assigmentData, setAssigmentData] = useState([]);
 
-    console.log("classes: ", data);
     useEffect(() => {
         if (data?.id) {
             const dataUsers = me.role === "teacher" ? data.teachers : data.students;
             const userExisted = dataUsers.find(user => user === me.id);
             if (userExisted) {
-                console.log(me);
                 classService.getAssigments(data.id)
                     .then(response => {
                         console.log("assigments: ", response.data);
@@ -66,18 +63,18 @@ export default function GradeStructureClass() {
                     console.log("add: ", response.data);
                     setAssigmentData([...assigmentData, response.data]);
                 }
-                
+
             });
     }
 
     return (
         <Container>
             <Row className="text-center">
-                <Col>
+                <Col className="mt-2">
                     <h2>Grade structure</h2>
                 </Col>
             </Row>
-            <Row className="mt-4">
+            <Row className="w-50 mx-auto">
                 {assigmentData.map(assigment => {
                     return <CardAssigment
                         classID={data.id}
@@ -89,10 +86,10 @@ export default function GradeStructureClass() {
                 })}
 
                 {data?.id && <CardAssigment
-                        classID={data.id}
-                        handleAdd={assigmentAdd}
-                        info={{ id: null }}
-                    />
+                    classID={data.id}
+                    handleAdd={assigmentAdd}
+                    info={{ id: null }}
+                />
                 }
             </Row>
         </Container>

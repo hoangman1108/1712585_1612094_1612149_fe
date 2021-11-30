@@ -49,7 +49,7 @@ export default function CardAssigment({ classID, info, handleAdd = null, handleE
     }
 
     return (
-        <Card className="mb-3">
+        <Card className="mb-3 shadow-sm bg-body rounded">
             <Formik
                 initialValues={{ name: info?.name, score: info?.score }}
                 validate={(values) => {
@@ -76,7 +76,7 @@ export default function CardAssigment({ classID, info, handleAdd = null, handleE
                     <Form onSubmit={handleSubmit} name={info.id}>
                         <Form.Group className="mb-2 mt-2">
                             <Row className="align-items-center">
-                                <Col xs={4} lg={2}>
+                                <Col xs={5}>
                                     <Form.Label>Assigment name:</Form.Label>
                                 </Col>
                                 <Col>
@@ -95,7 +95,7 @@ export default function CardAssigment({ classID, info, handleAdd = null, handleE
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Row className="align-items-center">
-                                <Col xs={4} lg={2}>
+                                <Col xs={5}>
                                     <Form.Label>Assigment score:</Form.Label>
                                 </Col>
                                 <Col>
