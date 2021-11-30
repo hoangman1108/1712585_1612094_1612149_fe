@@ -23,6 +23,11 @@ export default function TabsDetail() {
       >
         Assignment
       </Col>
+      <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'grade' ? '' : 'bg-non-active'}`}
+        onClick={() => handleChangePage('grade')}
+      >
+        Grade Structure
+      </Col>
     </Row>
   )
 }

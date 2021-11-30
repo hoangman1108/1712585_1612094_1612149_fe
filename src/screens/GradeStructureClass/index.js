@@ -5,6 +5,8 @@ import { useHistory } from 'react-router';
 import { useSelector } from 'react-redux';
 import classService from "../../services/class.service";
 import CardAssigment from "./components/CardAssigment";
+import TabsDetail from '../ClassScreen/components/TabsDetail';
+
 
 export default function GradeStructureClass() {
     const history = useHistory();
@@ -71,12 +73,8 @@ export default function GradeStructureClass() {
 
     return (
         <Container>
-            <Row className="text-center">
-                <Col className="mt-2">
-                    <h2>Grade structure</h2>
-                </Col>
-            </Row>
-            <Row className="w-50 mx-auto">
+            <TabsDetail />
+            <Row className="mt-4 w-50 mx-auto">
                 {assigmentData.map(assigment => {
                     return <CardAssigment
                         classID={data.id}
