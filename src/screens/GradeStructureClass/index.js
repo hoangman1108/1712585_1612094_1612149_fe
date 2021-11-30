@@ -35,6 +35,14 @@ export default function GradeStructureClass() {
     }
   }, [data?.id]);
 
+  useEffect(() => {
+    if (data) {
+      classService.updateIndexAssigments(data.id, {
+        assignments: [...assigmentData].map((ele) => ele.id),
+      });
+    }
+  }, [assigmentData]);
+
   const assigmentDelete = (id) => {
     console.log(id);
     nProgress.start();
@@ -68,11 +76,20 @@ export default function GradeStructureClass() {
     });
   };
 
+  const handleOnDragEnd = (res) => {
+    const items = [...assigmentData];
+
+    const [reorderedItem] = items.splice(res.source.index, 1);
+    items.splice(res.destination.index, 0, reorderedItem);
+
+    setAssigmentData(items);
+  };
+
   return (
     <Container>
       <TabsDetail />
 
-      <DragDropContext>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="datnc">
           {(provided) => (
             <Row
@@ -89,7 +106,6 @@ export default function GradeStructureClass() {
                   >
                     {(provided) => (
                       <div
-                        style={{ background: "red" }}
                         {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
@@ -106,6 +122,7 @@ export default function GradeStructureClass() {
                   </Draggable>
                 );
               })}
+              {provided.placeholder}
             </Row>
           )}
         </Droppable>
