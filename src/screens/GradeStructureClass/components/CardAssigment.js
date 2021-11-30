@@ -51,7 +51,7 @@ export default function CardAssigment({ classID, info, handleAdd = null, handleE
     return (
         <Card className="mb-3 shadow-sm bg-body rounded">
             <Formik
-                initialValues={{ name: info?.name, score: info?.score }}
+                initialValues={{ name: info?.name ? info.name : "", score: info?.score ? info.score : "" }}
                 validate={(values) => {
                     const errors = {};
                     if (!values.name) {

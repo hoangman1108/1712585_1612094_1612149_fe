@@ -36,6 +36,7 @@ export default function GradeStructureClass() {
 
     const assigmentDelete = (id) => {
         console.log(id);
+        nProgress.start();
         classService.deleteAssigments(id)
             .then((response) => {
                 if (response.data === "DELETED") {
@@ -44,6 +45,7 @@ export default function GradeStructureClass() {
                 } else {
                     console.log("deleted failed");
                 }
+                nProgress.done();
             });
     }
 
