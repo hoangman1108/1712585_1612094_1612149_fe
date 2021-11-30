@@ -88,16 +88,20 @@ export default function GradeStructureClass() {
                     index={index}
                   >
                     {(provided) => (
-                      <CardAssigment
-                        {...provided.dragHandleProps}
+                      <div
+                        style={{ background: "red" }}
+                        {...provided.draggableProps}
                         {...provided.dragHandleProps}
                         ref={provided.innerRef}
-                        classID={data.id}
-                        info={assigment}
-                        handleEdit={assigmentEdit}
-                        handleDelete={assigmentDelete}
-                        key={assigment.id ? assigment.id : ""}
-                      />
+                      >
+                        <CardAssigment
+                          classID={data.id}
+                          info={assigment}
+                          handleEdit={assigmentEdit}
+                          handleDelete={assigmentDelete}
+                          key={assigment.id ? assigment.id : ""}
+                        />
+                      </div>
                     )}
                   </Draggable>
                 );
