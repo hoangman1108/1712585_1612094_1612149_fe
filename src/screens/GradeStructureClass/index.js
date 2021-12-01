@@ -37,9 +37,11 @@ export default function GradeStructureClass() {
 
   useEffect(() => {
     if (data) {
-      classService.updateIndexAssigments(data.id, {
-        assignments: [...assigmentData].map((ele) => ele.id),
-      });
+      if(assigmentData.length){
+        classService.updateIndexAssigments(data.id, {
+          assignments: [...assigmentData].map((ele) => ele.id),
+        });
+      }
     }
   }, [assigmentData]);
 
@@ -64,7 +66,6 @@ export default function GradeStructureClass() {
   };
 
   const assigmentAdd = (data) => {
-    console.log("ADD");
     classService.addAssigments(data).then((response) => {
       if (response.data?.id) {
         console.log("add: ", response.data);
@@ -86,7 +87,7 @@ export default function GradeStructureClass() {
   return (
     <Container>
       <TabsDetail />
-      <Row className="mt-4 w-50 mx-auto">
+      {me.role === "teacher" && (<Row className="mt-4 w-50 mx-auto">
         {data?.id && (
           <CardAssigment
             classID={data.id}
@@ -94,7 +95,7 @@ export default function GradeStructureClass() {
             info={{ id: null }}
           />
         )}
-      </Row>
+      </Row>)}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="datnc">
           {(provided) => (

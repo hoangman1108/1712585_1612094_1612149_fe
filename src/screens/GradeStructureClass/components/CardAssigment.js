@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import nProgress from "nprogress";
 import { Card, Col, Row, Button, Form } from 'react-bootstrap';
 import { Formik } from "formik";
+import { useSelector } from 'react-redux';
 
-export default function CardAssigment({ classID, info, handleAdd = null, handleEdit = null, handleDelete = null}) {
+export default function CardAssigment({ classID, info, handleAdd = null, handleEdit = null, handleDelete = null }) {
     const [isEdit, setIsEdit] = useState(info.id ? false : true);
     const [isAdd, setIsAdd] = useState(info.id ? true : false);
-    
+    const { me } = useSelector(state => state.auth);
     const handleSubmitForm = (values, { setSubmitting }) => {
         if (info.id) {
             const form = document.querySelector(`[name='${info.id}']`);
@@ -115,46 +116,48 @@ export default function CardAssigment({ classID, info, handleAdd = null, handleE
                                 </Col>
                             </Row>
                         </Form.Group>
-                        <Form.Group className="mb-3">
-                            {
-                                info.id && (
-                                    <Row>
-                                        <Col></Col>
-                                        <Col className="d-flex justify-content-end">
-                                            <Button
-                                                variant="danger"
-                                                onClick={handleDelete.bind(this, info.id)}>
-                                                Delete
-                                            </Button>
-                                            <Button
-                                                type="submit"
-                                                className="ms-2"
-                                                disabled={isSubmitting}
-                                                variant={isEdit ? "success" : "primary"}
+                        {
+                            me.role === "teacher" && (<Form.Group className="mb-3">
+                                {
+                                    info.id && (
+                                        <Row>
+                                            <Col></Col>
+                                            <Col className="d-flex justify-content-end">
+                                                <Button
+                                                    variant="danger"
+                                                    onClick={handleDelete.bind(this, info.id)}>
+                                                    Delete
+                                                </Button>
+                                                <Button
+                                                    type="submit"
+                                                    className="ms-2"
+                                                    disabled={isSubmitting}
+                                                    variant={isEdit ? "success" : "primary"}
                                                 >
-                                                {isEdit ? "Save" : "Edit"}
-                                            </Button>
-                                        </Col>
-                                    </Row>
-                                )
-                            }
-                            {
-                                !info.id && (
-                                    <Row>
-                                        <Col>
-                                            <Button 
-                                                type="submit" 
-                                                disabled={isSubmitting} 
-                                                variant="success"
-                                                style={{ width: '100%' }}
+                                                    {isEdit ? "Save" : "Edit"}
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    )
+                                }
+                                {
+                                    !info.id && (
+                                        <Row>
+                                            <Col>
+                                                <Button
+                                                    type="submit"
+                                                    disabled={isSubmitting}
+                                                    variant="success"
+                                                    style={{ width: '100%' }}
                                                 >
                                                     Add
                                                 </Button>
-                                        </Col>
-                                    </Row>
-                                )
-                            }
-                        </Form.Group>
+                                            </Col>
+                                        </Row>
+                                    )
+                                }
+                            </Form.Group>)
+                        }
                     </Form>
                 )}
             </Formik>
