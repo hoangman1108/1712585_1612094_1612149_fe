@@ -27,8 +27,8 @@ export default function GradeStructureClass() {
       const dataUsers = me.role === "teacher" ? data.teachers : data.students;
       const userExisted = dataUsers.find((user) => user === me.id);
       if (userExisted) {
+        nProgress.start();
         classService.getAssigments(data.id).then((response) => {
-          console.log("assigments: ", response.data);
           setAssigmentData(response.data);
         });
       }
@@ -44,11 +44,9 @@ export default function GradeStructureClass() {
   }, [assigmentData]);
 
   const assigmentDelete = (id) => {
-    console.log(id);
     nProgress.start();
     classService.deleteAssigments(id).then((response) => {
       if (response.data === "DELETED") {
-        console.log("assigments: ", response.data);
         setAssigmentData(
           assigmentData.filter((assigment) => assigment.id != id)
         );
@@ -60,7 +58,6 @@ export default function GradeStructureClass() {
   };
 
   const assigmentEdit = (data) => {
-    console.log("EDIT");
     classService.updateAssigments(data).then((response) => {
       console.log("edit: ", response.data);
     });
@@ -71,6 +68,7 @@ export default function GradeStructureClass() {
     classService.addAssigments(data).then((response) => {
       if (response.data?.id) {
         console.log("add: ", response.data);
+        nProgress.done();
         setAssigmentData([...assigmentData, response.data]);
       }
     });
@@ -88,7 +86,15 @@ export default function GradeStructureClass() {
   return (
     <Container>
       <TabsDetail />
-
+      <Row className="mt-4 w-50 mx-auto">
+        {data?.id && (
+          <CardAssigment
+            classID={data.id}
+            handleAdd={assigmentAdd}
+            info={{ id: null }}
+          />
+        )}
+      </Row>
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="datnc">
           {(provided) => (
@@ -127,15 +133,7 @@ export default function GradeStructureClass() {
           )}
         </Droppable>
       </DragDropContext>
-      <Row className="mt-4 w-50 mx-auto">
-        {data?.id && (
-          <CardAssigment
-            classID={data.id}
-            handleAdd={assigmentAdd}
-            info={{ id: null }}
-          />
-        )}
-      </Row>
+
     </Container>
   );
 }

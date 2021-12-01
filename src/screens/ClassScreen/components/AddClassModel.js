@@ -1,32 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import nProgress from "nprogress";
 import { Modal, Button, Form } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Formik } from "formik";
-import userService from "../../../services/user.service";
 import { createClass } from "../../../redux/actions/class.action";
 export default function AddClassModel({ show, handleClose }) {
-  const [teachers, setTeachers] = useState([]);
+  const {me} = useSelector(state => state.auth);
   const dispatch = useDispatch();
-  useEffect(() => {
-    userService.getUserByRole("teacher").then((value) => {
-      if (value.data) {
-        setTeachers(value.data);
-      }
-    });
-  }, []);
+
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" keyboard={false}>
       <Formik
-        initialValues={{ name: "", teacher: undefined }}
+        initialValues={{ name: "" }}
         validate={(values) => {
           const errors = {};
           if (!values.name) {
             errors.name = "Field name is required";
-          }
-          if (!values.teacher) {
-            errors.teacher = "Field teacher is required";
           }
           return errors;
         }}
@@ -34,7 +24,7 @@ export default function AddClassModel({ show, handleClose }) {
           nProgress.start();
           const dataCreate = {
             name: values.name,
-            teachers: [values.teacher],
+            teachers: [me.id],
             codeJoin: "1234",
           };
           setTimeout(() => {
@@ -77,18 +67,10 @@ export default function AddClassModel({ show, handleClose }) {
                 <Form.Label>Tên GVCN</Form.Label>
                 <Form.Select
                   name="teacher"
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.teacher}
                   aria-label="Default select example"
                   as="select"
                 >
-                  <option>Chọn giáo viên</option>
-                  {teachers.map((teacher, index) => (
-                    <option key={index} value={teacher.id}>
-                      {teacher.name}
-                    </option>
-                  ))}
+                  <option>{me.name}</option>
                 </Form.Select>
                 {/* <Form.Control type="text"
                   name="teacher"

@@ -19,9 +19,9 @@ export default function TabsDetail() {
         Detail
       </Col>
       <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'assignment' ? '' : 'bg-non-active'}`} //bg-non-active
-        onClick={() => handleChangePage('assignment')}
+        onClick={() => handleChangePage('discuss')}
       >
-        Assignment
+        Discuss
       </Col>
       <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'grade' ? '' : 'bg-non-active'}`}
         onClick={() => handleChangePage('grade')}

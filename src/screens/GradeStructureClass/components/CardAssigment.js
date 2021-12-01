@@ -49,7 +49,10 @@ export default function CardAssigment({ classID, info, handleAdd = null, handleE
     }
 
     return (
-        <Card className="mb-3 shadow-sm bg-body rounded">
+        <Card className="mb-3 shadow-sm bg-body rounded" style={{
+            paddingLeft: '10px',
+            paddingRight: '10px',
+        }}>
             <Formik
                 initialValues={{ name: info?.name ? info.name : "", score: info?.score ? info.score : "" }}
                 validate={(values) => {

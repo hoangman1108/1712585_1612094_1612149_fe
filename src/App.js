@@ -14,7 +14,7 @@ import NotFoundScreen from "./screens/NotFoundScreen";
 import JoinClass from "./screens/JoinClass";
 import { useDispatch, useSelector } from "react-redux";
 import { me } from "./redux/actions/auth.action";
-import AssignmentClass from "./screens/AssignmentClass";
+import DiscussClass from "./screens/DiscussClass";
 import GradeStructureClass from "./screens/GradeStructureClass";
 import { getListClass } from "./redux/actions/class.action";
 
@@ -53,8 +53,8 @@ function App() {
       component: () => <DetailClass />,
     },
     {
-      path: '/classes/:id/assignment',
-      component: () => <AssignmentClass />,
+      path: '/classes/:id/discuss',
+      component: () => <DiscussClass />,
     },
     {
       path: '/classes/:id/grade',

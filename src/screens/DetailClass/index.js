@@ -17,7 +17,7 @@ export default function DetailClass() {
   const { me } = useSelector(state => state.auth)
   const [studentData, setStudentData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
-  const [checkInClass, setCheckInClass] = useState(false);
+  const [checkInClass, setCheckInClass] = useState(1);
   const [isInviteTeacher, setIsInviteTeacher] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
   const handleCloseInviteModal = () => setShowInviteModal(false);
@@ -113,13 +113,15 @@ export default function DetailClass() {
       })
     classService.checkUserInClass(history.location.pathname.split('/')[2])
       .then((response) => {
-        console.log(response, 'response');
-        setCheckInClass(response.data);
+        if(response.data){
+          setCheckInClass(2);
+        }else{
+          setCheckInClass(3);
+        }
       })
   }, [])
 
   const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
-  console.log(data);
   if (!data) {
     nProgress.start();
   } else {
@@ -132,10 +134,16 @@ export default function DetailClass() {
     <Button variant="outline-success" onClick={() => { history.push('/classes?offset=1&limit=6') }}>Quay lại</Button>
   </div>)
 
+  if(checkInClass === 1){
+    nProgress.start();
+    return (<></>);
+  }
+  nProgress.done();
+
   return (
     <>
       {
-        checkInClass ? (<Container>
+        checkInClass === 2 ? (<Container>
           <TabsDetail />
           <h4 className="mt-3">Thông tin lớp học</h4>
           <Alert variant='success'>

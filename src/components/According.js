@@ -11,7 +11,7 @@ export default function According() {
       <Accordion.Item eventKey="0"  className="mt-3">
         <Accordion.Header>
           <FontAwesomeIcon icon={faFileContract}/>
-           <span className="ps-3">Accordion Item #1</span></Accordion.Header>
+           <span className="ps-3">Post</span></Accordion.Header>
         <Accordion.Body className="shadow rounded">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
           tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
