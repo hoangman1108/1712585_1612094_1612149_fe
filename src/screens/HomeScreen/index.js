@@ -16,20 +16,21 @@ export default function ControlledCarousel() {
       <Carousel.Item>
         <img
           className="d-block w-100 h-img-carousel"
-          src="https://media.edutopia.org/styles/responsive_2880px_16x9/s3/masters/d7_images/cover_media/miller-169hero-selfmanage-getty.jpg"
+          src="https://cdnb.artstation.com/p/marketplace/presentation_assets/000/121/029/large/file.png?1554353080"
           alt="First slide"
         />
-        <Carousel.Caption>
-          <h3 style={{
-            color: '#198754',
+        <Carousel.Caption style={{ top: "0px" }}>
+          <span style={{
+            color: '#ffffff',
             fontWeight: "bold",
-          }}>Đến trang danh sách lớp</h3>
+            fontSize: "1.6rem",
+            marginRight: "10px"
+          }}>Go to class list page |</span>
         <Button
         style={{
-          marginBottom: "300px",
+          marginTop: "-10px",
         }}
-        variant="success"
-        
+        variant="dark"
         onClick={()=>{
           history.push('/classes?offset=1&limit=6');
         }}
@@ -40,25 +41,28 @@ export default function ControlledCarousel() {
       <Carousel.Item>
         <img
           className="d-block w-100 h-img-carousel"
-          src="https://biz30.timedoctor.com/images/2021/01/time-management-while-work-from-home.jpg"
+          src="https://wallup.net/wp-content/uploads/2017/11/23/445120-ArseniXC-classroom-building-realistic.jpg"
           alt="Second slide"
         />
 
-        <Carousel.Caption>
-        <h3 style={{
+        <Carousel.Caption style={{ top: "0px" }}>
+        <span style={{
+            color: '#ffffff',
             fontWeight: "bold",
-            color: '#198754'
-          }}>Đăng nhập/Đăng ký?</h3>
+            fontSize: "1.6rem",
+            marginRight: "10px"
+          }}>Login/Register? |</span>
         <Button
         style={{
-          marginBottom: "300px",
+          marginTop: "-10px",
         }}
-        variant="success"
+        variant="dark"
         onClick={()=>{
           history.push('/auth/login');
         }}
         >Visit</Button>
         </Carousel.Caption>
+        
       </Carousel.Item>
       {/* <Carousel.Item>
         <img
