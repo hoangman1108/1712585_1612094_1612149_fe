@@ -39,8 +39,8 @@ export default function ExportData({
         }
       >
         <ExcelSheet data={rows} name="Sheet 1">
-          {filterColumns(rows).map(col => {
-            return <ExcelColumn label={camelCase(col)} value={col} />;
+          {filterColumns(rows).map((col, index) => {
+            return <ExcelColumn label={camelCase(col)} value={col} key={index} />;
           })}
         </ExcelSheet>
       </ExcelFile>

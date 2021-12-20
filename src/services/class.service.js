@@ -58,6 +58,10 @@ const addAssigments = (data) => {
   return axios.post(API_URL + "/assignments", data, { headers: authHeader() });
 };
 
+const getLstStudentsReal = (id) => {
+  return axios.get(API_URL + `/files/list-student/${id}`, { headers: authHeader() });
+}
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -70,6 +74,7 @@ const classService = {
   updateAssigments,
   deleteAssigments,
   addAssigments,
+  getLstStudentsReal
 };
 
 export default classService;

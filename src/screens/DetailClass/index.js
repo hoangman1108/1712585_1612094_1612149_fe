@@ -18,6 +18,7 @@ export default function DetailClass() {
   const { me } = useSelector(state => state.auth)
   const [studentData, setStudentData] = useState([]);
   const [teacherData, setTeacherData] = useState([]);
+  const [studentRealData, setStudentRealData] = useState([]);
   const [checkInClass, setCheckInClass] = useState(1);
   const [isInviteTeacher, setIsInviteTeacher] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
@@ -106,19 +107,44 @@ export default function DetailClass() {
     []
   )
 
+  const studentRealColumns = React.useMemo(
+    () => [
+      {
+        Header: 'Students',
+        columns: [
+          {
+            Header: 'MSSV',
+            accessor: 'MSSV',
+          },
+          {
+            Header: 'Full Name',
+            accessor: 'fullName',
+          }
+        ],
+      }
+    ],
+    []
+  )
+
   useEffect(() => {
-    classService.detailClass(history.location.pathname.split('/')[2])
+    const classID = history.location.pathname.split('/')[2];
+    classService.detailClass(classID)
       .then(response => {
         setStudentData(makeData(response?.data?.students));
         setTeacherData(makeData(response?.data?.teachers))
       })
-    classService.checkUserInClass(history.location.pathname.split('/')[2])
+    classService.checkUserInClass(classID)
       .then((response) => {
         if(response.data){
           setCheckInClass(2);
         }else{
           setCheckInClass(3);
         }
+      })
+      classService.getLstStudentsReal(classID)
+      .then(response => {
+        setStudentRealData(makeData(response.data.data));
+        console.log("Data: ", studentRealData);
       })
   }, [])
 
@@ -160,7 +186,7 @@ export default function DetailClass() {
 
           <Row className="mt-5 mb-2">
             <Col>
-              <h5 className="fw-bold">Danh sách Giáo viên</h5>
+              <h5 className="fw-bold">Danh sách giáo viên</h5>
             </Col >
             <Col className="d-flex justify-content-end">
               {
@@ -172,7 +198,7 @@ export default function DetailClass() {
                   >
                     <div className="d-flex align-items-center">
                       <BsFillPersonPlusFill style={{ marginRight: '10px', fontSize: '20px' }} />
-                      <span>Add</span>
+                      <span>Invite</span>
                     </div>
                   </Button>
                 )
@@ -185,7 +211,32 @@ export default function DetailClass() {
 
           <Row className="mt-5 mb-2">
             <Col>
-              <h5 className="fw-bold">Danh sách sinh viên</h5>
+              <h5 className="fw-bold">Danh sách sinh viên của lớp học</h5>
+            </Col>
+            <Col className="d-flex justify-content-end">
+              <ExportData rows={studentRealData}></ExportData>
+              {
+                me.role === "teacher" && (
+                  <Button variant="success" 
+                          name="inviteStudent" 
+                          onClick={handleShowInviteModal.bind(this, "inviteStudent")}
+                          style={{ marginLeft: '10px' }}
+                  >
+                    <div className="d-flex align-items-center">
+                      <BsFillPersonPlusFill style={{ marginRight: '10px', fontSize: '20px' }} />
+                      <span>Add</span>
+                    </div>
+                  </Button>
+                )
+              }
+
+            </Col>
+          </Row>
+          <TableInfoUser columns={studentRealColumns} data={studentRealData} />
+          
+          <Row className="mt-5 mb-2">
+            <Col>
+              <h5 className="fw-bold">Danh sách sinh viên tham gia lớp học</h5>
             </Col>
             <Col className="d-flex justify-content-end">
               <ExportData rows={studentData} lstKeysRemove={['password', 'passwordSalt', 'id']}></ExportData>
@@ -198,7 +249,7 @@ export default function DetailClass() {
                   >
                     <div className="d-flex align-items-center">
                       <BsFillPersonPlusFill style={{ marginRight: '10px', fontSize: '20px' }} />
-                      <span>Add</span>
+                      <span>Invite</span>
                     </div>
                   </Button>
                 )
