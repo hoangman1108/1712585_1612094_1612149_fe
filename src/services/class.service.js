@@ -69,6 +69,10 @@ const importLstStudentReal = (formData) => {
   });
 }
 
+const getPointsByAssignmentID = (classID, assignmentID) => {
+  return axios.get(API_URL + `/point-assignment/show-point-assignment/${classID}/${assignmentID}`, { headers: authHeader() });
+}
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -82,7 +86,8 @@ const classService = {
   deleteAssigments,
   addAssigments,
   getLstStudentsReal,
-  importLstStudentReal
+  importLstStudentReal,
+  getPointsByAssignmentID
 };
 
 export default classService;

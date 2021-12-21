@@ -45,7 +45,7 @@ export default function DetailClass() {
           icon: status ? 'success' : 'error',
           title: status ? 'Upload file successfully !!!' : 'Upload file failed !!!',
           showConfirmButton: false,
-          timer: 2000
+          timer: 1500
         });
 
         if (status) callGetLstStudentsReal(classID);
@@ -167,6 +167,7 @@ export default function DetailClass() {
         }
       })
       callGetLstStudentsReal(classID);
+
   }, [])
 
   const callGetLstStudentsReal = (classID) => {

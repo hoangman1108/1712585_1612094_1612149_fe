@@ -28,6 +28,11 @@ export default function TabsDetail() {
       >
         Grade Structure
       </Col>
+      <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'grade-board' ? '' : 'bg-non-active'}`}
+        onClick={() => handleChangePage('grade-board')}
+      >
+        Grade Board
+      </Col>
     </Row>
   )
 }

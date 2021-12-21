@@ -21,7 +21,7 @@ export default function GradeStructureClass() {
   }
 
   const [assigmentData, setAssigmentData] = useState([]);
-
+  
   useEffect(() => {
     if (data?.id) {
       const dataUsers = me.role === "teacher" ? data.teachers : data.students;

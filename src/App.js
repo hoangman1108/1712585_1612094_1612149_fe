@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { me } from "./redux/actions/auth.action";
 import DiscussClass from "./screens/DiscussClass";
 import GradeStructureClass from "./screens/GradeStructureClass";
+import GradeBoardClass from "./screens/GradeBoardClass";
 import { getListClass } from "./redux/actions/class.action";
 
 function App() {
@@ -59,6 +60,10 @@ function App() {
     {
       path: '/classes/:id/grade',
       component: () => <GradeStructureClass />,
+    },
+    {
+      path: '/classes/:id/grade-board',
+      component: () => <GradeBoardClass />,
     },
     {
       path: '/classes',
