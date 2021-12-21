@@ -33,20 +33,13 @@ export default function DetailClass() {
   }
   
   const handleImportStudents = (e) => {
-    Swal.fire({
-      position: 'center',
-      icon: 'success',
-      title: 'Upload file successfully !!!',
-      showConfirmButton: false,
-      timer: 2000
-    });
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
     formData.append("classId", classID);
     classService.importLstStudentReal(formData)
       .then(response => {
-        const status = response.status === 200 ? true : false;
+        const status = response?.data?.message === "UPLOAD_FILE_STUDENT_SUCCESS" ? true : false;
         Swal.fire({
           position: 'center',
           icon: status ? 'success' : 'error',
@@ -57,6 +50,7 @@ export default function DetailClass() {
 
         if (status) callGetLstStudentsReal(classID);
       });
+    e.target.value = null;
   }
 
   const studentColumns = React.useMemo(
