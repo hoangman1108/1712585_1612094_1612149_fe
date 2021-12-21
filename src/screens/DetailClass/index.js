@@ -11,6 +11,7 @@ import { BsFillPersonPlusFill, BsFileEarmarkArrowDownFill } from "react-icons/bs
 import InviteClassModal from './components/InviteClassModal';
 import classService from '../../services/class.service';
 import ExportData from './components/ExportData';
+import Swal from 'sweetalert2';
 
 export default function DetailClass() {
   const history = useHistory();
@@ -32,13 +33,29 @@ export default function DetailClass() {
   }
   
   const handleImportStudents = (e) => {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Upload file successfully !!!',
+      showConfirmButton: false,
+      timer: 2000
+    });
     const file = e.target.files[0];
     const formData = new FormData();
     formData.append("file", file);
     formData.append("classId", classID);
     classService.importLstStudentReal(formData)
       .then(response => {
-        callGetLstStudentsReal(classID);
+        const status = response.status === 200 ? true : false;
+        Swal.fire({
+          position: 'center',
+          icon: status ? 'success' : 'error',
+          title: status ? 'Upload file successfully !!!' : 'Upload file failed !!!',
+          showConfirmButton: false,
+          timer: 2000
+        });
+
+        if (status) callGetLstStudentsReal(classID);
       });
   }
 
@@ -165,7 +182,7 @@ export default function DetailClass() {
     })
   }
 
-  const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
+  const data = classes.find(element => element.id === classID);
   if (!data) {
     nProgress.start();
   } else {
