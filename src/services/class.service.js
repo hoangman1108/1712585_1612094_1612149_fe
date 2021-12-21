@@ -62,6 +62,13 @@ const getLstStudentsReal = (id) => {
   return axios.get(API_URL + `/files/list-student/${id}`, { headers: authHeader() });
 }
 
+const importLstStudentReal = (formData) => {
+  return axios.post(API_URL + `/files/upload-list-student`, formData, { 
+    headers: authHeader(),
+    contentType: 'multipart/form-data'
+  });
+}
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -74,7 +81,8 @@ const classService = {
   updateAssigments,
   deleteAssigments,
   addAssigments,
-  getLstStudentsReal
+  getLstStudentsReal,
+  importLstStudentReal
 };
 
 export default classService;

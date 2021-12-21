@@ -7,7 +7,7 @@ import { useHistory } from 'react-router';
 import TabsDetail from '../ClassScreen/components/TabsDetail';
 import makeData from './components/makeData';
 import TableInfoUser from './components/TableInfoUser';
-import { BsFillPersonPlusFill } from "react-icons/bs";
+import { BsFillPersonPlusFill, BsFileEarmarkArrowDownFill } from "react-icons/bs";
 import InviteClassModal from './components/InviteClassModal';
 import classService from '../../services/class.service';
 import ExportData from './components/ExportData';
@@ -22,11 +22,26 @@ export default function DetailClass() {
   const [checkInClass, setCheckInClass] = useState(1);
   const [isInviteTeacher, setIsInviteTeacher] = useState(false);
   const [showInviteModal, setShowInviteModal] = useState(false);
+  const classID = history.location.pathname.split('/')[2];
+
   const handleCloseInviteModal = () => setShowInviteModal(false);
+
   const handleShowInviteModal = (inviteObject) => {
     setShowInviteModal(true);
     setIsInviteTeacher(inviteObject === "inviteTeacher" ? true : false);
   }
+  
+  const handleImportStudents = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", classID);
+    classService.importLstStudentReal(formData)
+      .then(response => {
+        callGetLstStudentsReal(classID);
+      });
+  }
+
   const studentColumns = React.useMemo(
     () => [
       {
@@ -127,7 +142,6 @@ export default function DetailClass() {
   )
 
   useEffect(() => {
-    const classID = history.location.pathname.split('/')[2];
     classService.detailClass(classID)
       .then(response => {
         setStudentData(makeData(response?.data?.students));
@@ -141,12 +155,15 @@ export default function DetailClass() {
           setCheckInClass(3);
         }
       })
-      classService.getLstStudentsReal(classID)
-      .then(response => {
-        setStudentRealData(makeData(response.data.data));
-        console.log("Data: ", studentRealData);
-      })
+      callGetLstStudentsReal(classID);
   }, [])
+
+  const callGetLstStudentsReal = (classID) => {
+    classService.getLstStudentsReal(classID)
+    .then(response => {
+      setStudentRealData(makeData(response.data.data));
+    })
+  }
 
   const data = classes.find(element => element.id === history.location.pathname.split('/')[2]);
   if (!data) {
@@ -218,14 +235,17 @@ export default function DetailClass() {
               {
                 me.role === "teacher" && (
                   <Button variant="success" 
-                          name="inviteStudent" 
-                          onClick={handleShowInviteModal.bind(this, "inviteStudent")}
                           style={{ marginLeft: '10px' }}
                   >
-                    <div className="d-flex align-items-center">
-                      <BsFillPersonPlusFill style={{ marginRight: '10px', fontSize: '20px' }} />
-                      <span>Add</span>
-                    </div>
+                    <input  id="import-students" 
+                            type="file" 
+                            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" 
+                            onChange={handleImportStudents}
+                            hidden />
+                    <label for="import-students" className="d-flex align-items-center">
+                      <BsFileEarmarkArrowDownFill style={{ marginRight: '10px', fontSize: '20px' }} />
+                      <span>Import</span>
+                    </label>
                   </Button>
                 )
               }

@@ -3,7 +3,7 @@ import ReactExport from 'react-export-excel';
 import moment from 'moment';
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
-import { BsFillArrowDownCircleFill } from "react-icons/bs";
+import { BsFileEarmarkText } from "react-icons/bs";
 
 export default function ExportData({
   rows,
@@ -33,7 +33,7 @@ export default function ExportData({
         filename={fileName}
         element={
             <div className='d-flex align-items-center'>
-                <BsFillArrowDownCircleFill style={{ marginRight: '10px', fontSize: '20px' }} />
+                <BsFileEarmarkText style={{ marginRight: '10px', fontSize: '20px' }} />
                 <span>{translate('Export')}</span> 
             </div>
         }

@@ -68,17 +68,17 @@ function TableInfoUser({ columns, data }) {
           })}
         </tbody>
       </BTable>
-      <div className="pagination-custom">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+      <div className="pagination-custom text-center">
+        <button style={{ color: 'black' }} onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
         </button>{' '}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+        <button style={{ color: 'black' }} onClick={() => previousPage()} disabled={!canPreviousPage}>
           {'<'}
         </button>{' '}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
+        <button style={{ color: 'black' }} onClick={() => nextPage()} disabled={!canNextPage}>
           {'>'}
         </button>{' '}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+        <button style={{ color: 'black' }} onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
           {'>>'}
         </button>{' '}
         <span>
@@ -101,6 +101,7 @@ function TableInfoUser({ columns, data }) {
         </span>{' '}
         <select
           value={pageSize}
+          style={{ height: '30px' }}
           onChange={e => {
             setPageSize(Number(e.target.value))
           }}
