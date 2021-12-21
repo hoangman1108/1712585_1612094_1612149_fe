@@ -1,6 +1,6 @@
 import nProgress from "nprogress";
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
+import { Container, Row } from "react-bootstrap";
 import { useHistory } from "react-router";
 import { useSelector } from "react-redux";
 import classService from "../../services/class.service";
@@ -37,7 +37,7 @@ export default function GradeStructureClass() {
 
   useEffect(() => {
     if (data) {
-      if(assigmentData.length){
+      if (assigmentData.length) {
         classService.updateIndexAssigments(data.id, {
           assignments: [...assigmentData].map((ele) => ele.id),
         });
@@ -87,15 +87,17 @@ export default function GradeStructureClass() {
   return (
     <Container>
       <TabsDetail />
-      {me.role === "teacher" && (<Row className="mt-4 w-50 mx-auto">
-        {data?.id && (
-          <CardAssigment
-            classID={data.id}
-            handleAdd={assigmentAdd}
-            info={{ id: null }}
-          />
-        )}
-      </Row>)}
+      {me.role === "teacher" && (
+        <Row className="mt-4 w-50 mx-auto">
+          {data?.id && (
+            <CardAssigment
+              classID={data.id}
+              handleAdd={assigmentAdd}
+              info={{ id: null }}
+            />
+          )}
+        </Row>
+      )}
       <DragDropContext onDragEnd={handleOnDragEnd}>
         <Droppable droppableId="datnc">
           {(provided) => (
@@ -134,7 +136,6 @@ export default function GradeStructureClass() {
           )}
         </Droppable>
       </DragDropContext>
-
     </Container>
   );
 }
