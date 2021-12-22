@@ -10,8 +10,12 @@ import TableGradeBoard from "./components/TableGradeBoard";
 import classService from "../../services/class.service";
 // import ExportData from '../DetailClass/components/ExportData';
 // import Swal from 'sweetalert2';
-import ExportData from './components/ExportData';
-import { BsFillPersonPlusFill, BsFileEarmarkArrowDownFill } from "react-icons/bs";
+import ExportData from "./components/ExportData";
+import {
+  BsFillPersonPlusFill,
+  BsFileEarmarkArrowDownFill,
+} from "react-icons/bs";
+import Swal from "sweetalert2";
 
 export default function GradeBoardClass() {
   const history = useHistory();
@@ -19,8 +23,10 @@ export default function GradeBoardClass() {
   const [gradeData, setGradeData] = useState([]);
   const [checkInClass, setCheckInClass] = useState(1);
   const [assignmentData, setAssignmentData] = useState([]);
+  const [assignmentId, setAssignmentId] = useState(null);
   const classID = history.location.pathname.split("/")[2];
-  const { me } = useSelector(state => state.auth)
+  const { me } = useSelector((state) => state.auth);
+  const [callGetAssigment, setCallGetAssigment] = useState(false);
 
   const gradeColumns = React.useMemo(
     () => [
@@ -49,11 +55,11 @@ export default function GradeBoardClass() {
   );
 
   const onSelectedAssignment = (e) => {
-    console.log("vao day");
-    const assignmentID = e.target.value;
-    if (assignmentID !== "default") {
+    const assignmentIDSelected = e.target.value;
+    if (assignmentIDSelected !== "default") {
+      setAssignmentId(assignmentIDSelected);
       classService
-        .getPointsByAssignmentID(classID, assignmentID)
+        .getPointsByAssignmentID(classID, assignmentIDSelected)
         .then((response) => {
           console.log(response);
           setGradeData(response?.data?.points);
@@ -62,9 +68,31 @@ export default function GradeBoardClass() {
     }
   };
 
-  const handleImportStudents = ()=>{
+  const handleImportGrades = (e) => {
+    const file = e.target.files[0];
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("classId", classID);
+    formData.append("assignmentId", assignmentId);
+    classService.importListGrade(formData).then((response) => {
+      const status =
+        response?.data?.message === "UPLOAD_FILE_STUDENT_SUCCESS"
+          ? true
+          : false;
+      Swal.fire({
+        position: "center",
+        icon: status ? "success" : "error",
+        title: status
+          ? "Upload file successfully !!!"
+          : "Upload file failed !!!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
-  }
+      if (status) setCallGetAssigment(!callGetAssigment);
+    });
+    e.target.value = null;
+  };
   useEffect(() => {
     classService.checkUserInClass(classID).then((response) => {
       if (response.data) {
@@ -76,11 +104,18 @@ export default function GradeBoardClass() {
   }, []);
 
   useEffect(() => {
-    console.log("vo day ne");
     classService.getAssigments(classID).then((response) => {
       setAssignmentData(response.data);
     });
-  }, []);
+    if (assignmentId)
+      classService
+        .getPointsByAssignmentID(classID, assignmentId)
+        .then((response) => {
+          console.log(response);
+          setGradeData(response?.data?.points);
+          console.log(gradeData);
+        });
+  }, [callGetAssigment]);
 
   const data = classes.find((element) => element.id === classID);
   if (!data) {
@@ -122,7 +157,9 @@ export default function GradeBoardClass() {
             <Col>
               <span>Choose assignment: </span>
               <select onChange={onSelectedAssignment}>
-                <option value="default">--- select ---</option>
+                <option value={assignmentId ? assignmentId : "Defaul"}>
+                  --- select ---
+                </option>
                 {assignmentData.map((assignment, index) => (
                   <option key={index} value={assignment.id}>
                     {assignment.name}
@@ -138,7 +175,7 @@ export default function GradeBoardClass() {
                     id="import-students"
                     type="file"
                     accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-                    onChange={handleImportStudents}
+                    onChange={handleImportGrades}
                     hidden
                   />
                   <label

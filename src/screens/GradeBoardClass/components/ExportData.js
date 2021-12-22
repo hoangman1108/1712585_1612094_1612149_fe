@@ -8,7 +8,7 @@ import { BsFileEarmarkText } from "react-icons/bs";
 export default function ExportData({
   rows,
   lstKeysRemove = [],
-  fileName = `list_transactions_${moment().format('DDMMYYYYHHmmss')}`
+  fileName = `grade_boards_${moment().format('DDMMYYYYHHmmss')}`
 }) {
   const ExcelFile = ReactExport.ExcelFile;
   const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;

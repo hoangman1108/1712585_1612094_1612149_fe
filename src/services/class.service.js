@@ -73,6 +73,14 @@ const getPointsByAssignmentID = (classID, assignmentID) => {
   return axios.get(API_URL + `/point-assignment/show-point-assignment/${classID}/${assignmentID}`, { headers: authHeader() });
 }
 
+const importListGrade = (formData) => {
+  return axios.post(API_URL + `/point-assignment/upload-file-point-by-teacher`, formData, { 
+    headers: authHeader(),
+    contentType: 'multipart/form-data'
+  });
+}
+
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -87,7 +95,8 @@ const classService = {
   addAssigments,
   getLstStudentsReal,
   importLstStudentReal,
-  getPointsByAssignmentID
+  getPointsByAssignmentID,
+  importListGrade
 };
 
 export default classService;
