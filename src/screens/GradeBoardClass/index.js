@@ -27,6 +27,7 @@ export default function GradeBoardClass() {
   const classID = history.location.pathname.split("/")[2];
   const { me } = useSelector((state) => state.auth);
   const [callGetAssigment, setCallGetAssigment] = useState(false);
+  const [totalGrade, setTotalGrade] = useState(0);
 
   const gradeColumns = React.useMemo(
     () => [
@@ -48,6 +49,9 @@ export default function GradeBoardClass() {
           {
             Header: "Action",
           },
+          {
+            Header: "Edit grade",
+          },
         ],
       },
     ],
@@ -61,9 +65,12 @@ export default function GradeBoardClass() {
       classService
         .getPointsByAssignmentID(classID, assignmentIDSelected)
         .then((response) => {
-          console.log(response);
-          setGradeData(response?.data?.points);
-          console.log(gradeData);
+          const data = response?.data?.points;
+          const totalGradeNew = data.reduce((total, obj) => {
+            return total + (obj.point || 0);
+          }, 0);
+          setTotalGrade(totalGradeNew);
+          setGradeData([...data]);
         });
     }
   };
@@ -111,9 +118,12 @@ export default function GradeBoardClass() {
       classService
         .getPointsByAssignmentID(classID, assignmentId)
         .then((response) => {
-          console.log(response);
-          setGradeData(response?.data?.points);
-          console.log(gradeData);
+          const data = response?.data?.points;
+          const totalGradeNew = data.reduce((total, obj) => {
+            return total + (obj.point || 0);
+          }, 0);
+          setTotalGrade(totalGradeNew);
+          setGradeData([...data]);
         });
   }, [callGetAssigment]);
 
@@ -195,6 +205,9 @@ export default function GradeBoardClass() {
           {gradeData.length > 0 && (
             <TableGradeBoard columns={gradeColumns} data={gradeData} />
           )}
+          <div>
+            <label>Total grade: {totalGrade}</label>
+          </div>
         </Container>
       ) : (
         renderOps()
