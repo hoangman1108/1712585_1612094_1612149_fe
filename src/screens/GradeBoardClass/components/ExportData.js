@@ -15,7 +15,7 @@ export default function ExportData({
   const ExcelColumn = ReactExport.ExcelFile.ExcelColumn;
   const { t: translate } = useTranslation();
   const camelCase = str => {
-    return str.substring(0, 1).toUpperCase() + str.substring(1);
+    return str.substring(0, 1) + str.substring(1);
   };
 
   const filterColumns = data => {
