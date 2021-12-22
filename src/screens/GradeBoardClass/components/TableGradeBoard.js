@@ -1,8 +1,9 @@
 import React from "react";
 import { useTable, usePagination } from "react-table";
 import BTable from "react-bootstrap/Table";
+import { BsPencilSquare } from "react-icons/bs";
 
-function TableGradeBoard({ columns, data }) {
+function TableGradeBoard({ columns, data, onEdit }) {
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } =
     useTable(
       {
@@ -33,9 +34,17 @@ function TableGradeBoard({ columns, data }) {
             return (
               <tr {...row.getRowProps()}>
                 {row.cells.map((cell) => {
-                  console.log("cell", cell);
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <td {...cell.getCellProps()}>
+                      {
+                        cell.column.Header === "Action" ? (
+                          <BsPencilSquare
+                            onClick={onEdit.bind(this, cell.row.original)}
+                            style={{ marginLeft: "10px", fontSize: "20px", cursor: 'pointer' }}
+                          />
+                        ) : cell.render("Cell")
+                      }
+                    </td>
                   );
                 })}
               </tr>

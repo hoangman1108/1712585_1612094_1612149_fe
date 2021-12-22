@@ -9,7 +9,7 @@ import TableGradeBoard from "./components/TableGradeBoard";
 // import { BsFillPersonPlusFill, BsFileEarmarkArrowDownFill } from "react-icons/bs";
 import classService from "../../services/class.service";
 // import ExportData from '../DetailClass/components/ExportData';
-// import Swal from 'sweetalert2';
+
 import ExportData from "./components/ExportData";
 import {
   BsFillPersonPlusFill,
@@ -48,32 +48,69 @@ export default function GradeBoardClass() {
           },
           {
             Header: "Action",
-          },
-          {
-            Header: "Edit grade",
-          },
+          }
         ],
       },
     ],
     []
   );
-
+  
   const onSelectedAssignment = (e) => {
     const assignmentIDSelected = e.target.value;
     if (assignmentIDSelected !== "default") {
-      setAssignmentId(assignmentIDSelected);
-      classService
-        .getPointsByAssignmentID(classID, assignmentIDSelected)
-        .then((response) => {
-          const data = response?.data?.points;
-          const totalGradeNew = data.reduce((total, obj) => {
-            return total + (obj.point || 0);
-          }, 0);
-          setTotalGrade(totalGradeNew);
-          setGradeData([...data]);
-        });
+      getDataDetailAssignment(assignmentIDSelected);
     }
   };
+
+  const getDataDetailAssignment = (assignmentIDSelected) => {
+    setAssignmentId(assignmentIDSelected);
+    classService
+      .getPointsByAssignmentID(classID, assignmentIDSelected)
+      .then((response) => {
+        const data = response?.data?.points;
+        const totalGradeNew = data.reduce((total, obj) => {
+          return total + (obj.point || 0);
+        }, 0);
+        setTotalGrade(totalGradeNew);
+        setGradeData([...data]);
+      });
+  }
+
+  async function editPointStudent(student) {
+    console.log(student);
+    const { value: point } = await Swal.fire({
+      title: 'Input point',
+      input: 'number',
+      inputLabel: 'Point of student',
+      inputPlaceholder: 'Enter point of student',
+      showCancelButton: true,
+    });
+    
+    if (point) {
+      
+      const data = {
+        classId: classID,
+        MSSV: student.MSSV,
+        fullName: student.fullName,
+        assignmentId: assignmentId,
+        point: point
+      }
+      classService.updatePointByTeacher(data)
+      .then(response => {
+        const status = response.data?.message === "UPDATED" ? true : false;
+        Swal.fire({
+          position: "center",
+          icon: status ? "success" : "error",
+          title: status
+            ? "Upload point successfully !!!"
+            : "Upload point failed !!!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        getDataDetailAssignment(assignmentId);
+      })
+    }
+  }
 
   const handleImportGrades = (e) => {
     const file = e.target.files[0];
@@ -100,6 +137,7 @@ export default function GradeBoardClass() {
     });
     e.target.value = null;
   };
+
   useEffect(() => {
     classService.checkUserInClass(classID).then((response) => {
       if (response.data) {
@@ -203,7 +241,7 @@ export default function GradeBoardClass() {
           </Row>
 
           {gradeData.length > 0 && (
-            <TableGradeBoard columns={gradeColumns} data={gradeData} />
+            <TableGradeBoard columns={gradeColumns} data={gradeData} onEdit={editPointStudent} />
           )}
           <div>
             <label>Total grade: {totalGrade}</label>
