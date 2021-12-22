@@ -59,27 +59,42 @@ const addAssigments = (data) => {
 };
 
 const getLstStudentsReal = (id) => {
-  return axios.get(API_URL + `/files/list-student/${id}`, { headers: authHeader() });
-}
+  return axios.get(API_URL + `/files/list-student/${id}`, {
+    headers: authHeader(),
+  });
+};
 
 const importLstStudentReal = (formData) => {
-  return axios.post(API_URL + `/files/upload-list-student`, formData, { 
+  return axios.post(API_URL + `/files/upload-list-student`, formData, {
     headers: authHeader(),
-    contentType: 'multipart/form-data'
+    contentType: "multipart/form-data",
   });
-}
+};
 
 const getPointsByAssignmentID = (classID, assignmentID) => {
-  return axios.get(API_URL + `/point-assignment/show-point-assignment/${classID}/${assignmentID}`, { headers: authHeader() });
-}
+  return axios.get(
+    API_URL +
+      `/point-assignment/show-point-assignment/${classID}/${assignmentID}`,
+    { headers: authHeader() }
+  );
+};
 
 const importListGrade = (formData) => {
-  return axios.post(API_URL + `/point-assignment/upload-file-point-by-teacher`, formData, { 
-    headers: authHeader(),
-    contentType: 'multipart/form-data'
-  });
-}
+  return axios.post(
+    API_URL + `/point-assignment/upload-file-point-by-teacher`,
+    formData,
+    {
+      headers: authHeader(),
+      contentType: "multipart/form-data",
+    }
+  );
+};
 
+const updatePointByTeacher = (formData) => {
+  return axios.post(API_URL + `/point-assignment/update-by-teacher`, formData, {
+    headers: authHeader(),
+  });
+};
 
 const classService = {
   getAllClass,
@@ -96,7 +111,8 @@ const classService = {
   getLstStudentsReal,
   importLstStudentReal,
   getPointsByAssignmentID,
-  importListGrade
+  importListGrade,
+  updatePointByTeacher,
 };
 
 export default classService;
