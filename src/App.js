@@ -18,6 +18,7 @@ import DiscussClass from "./screens/DiscussClass";
 import GradeStructureClass from "./screens/GradeStructureClass";
 import GradeBoardClass from "./screens/GradeBoardClass";
 import { getListClass } from "./redux/actions/class.action";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 
 function App() {
 
@@ -37,6 +38,10 @@ function App() {
     {
       path: '/auth/register',
       component: () => <RegisterScreen />,
+    },
+    {
+      path: '/auth/forgot-password',
+      component: () => <ForgotPasswordScreen />
     },
     {
       path: '/',

@@ -19,11 +19,16 @@ const me = () => {
     .get(API_URL + "/users/me", { headers: authHeader() });
 };
 
+const forgotPassword = (email) => {
+  return axios.post(API_URL + "/auth/forgot-password", { email });
+}
+
 
 const authService = {
   register,
   login,
   me,
+  forgotPassword
 };
 
 export default authService;
