@@ -174,6 +174,17 @@ const LoginScreen = () => {
                   </a>
                 </p>
 
+                <p
+                  style={{ fontSize: ".875em" }}
+                  class="text-muted text-center rounded mt-3"
+                >
+                  Did you forget the password?
+                  <a className="text-success" href="/auth/forgot-password">
+                    {" "}
+                    Get password again
+                  </a>
+                </p>
+
                 {message && (
                   <p
                     style={{ fontSize: ".875em" }}
