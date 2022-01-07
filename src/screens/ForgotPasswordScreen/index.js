@@ -22,11 +22,12 @@ const ForgotPasswordScreen = () => {
             }}
             onSubmit={(values, { setSubmitting }) => {
               nProgress.start();
-              setSubmitting(false);
+              setSubmitting(true);
               const { email } = values;
               authService.forgotPassword(email)
               .then((res) => {
                 nProgress.done();
+                setSubmitting(false);
                 const status = res?.data?.message === "CHECK_YOUR_EMAIL_TO_RESET_PASSWORD" ? true : false;
                 Swal.fire({
                   position: "center",
@@ -56,9 +57,9 @@ const ForgotPasswordScreen = () => {
                     value={props.values.email}
                     name="email"
                   />
-                  {props.errors.username && (
+                  {props.errors.email && (
                     <Form.Text className="text-danger">
-                      {props.errors.username}
+                      {props.errors.email}
                     </Form.Text>
                   )}
                 </Form.Group>
@@ -68,7 +69,7 @@ const ForgotPasswordScreen = () => {
                   variant="outline-success"
                   type="submit"
                 >
-                  Get password
+                  Search
                 </Button>
                 
               </Form>

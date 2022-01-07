@@ -23,12 +23,17 @@ const forgotPassword = (email) => {
   return axios.post(API_URL + "/auth/forgot-password", { email });
 }
 
+const resetPassword = (userID, newPassword) => {
+  return axios.post(API_URL + `/auth/reset-password?userId=${userID}`, { newPassword });
+}
+
 
 const authService = {
   register,
   login,
   me,
-  forgotPassword
+  forgotPassword,
+  resetPassword
 };
 
 export default authService;
