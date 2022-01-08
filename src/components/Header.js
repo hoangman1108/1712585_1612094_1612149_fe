@@ -25,9 +25,9 @@ export default function Header() {
   };
 
   return (
-    <Navbar bg="secondary" expand={false}>
+    <Navbar bg="white card-shadow" expand={false}>
       <Container fluid>
-        <Navbar.Brand href="/" className="text-light fw-bold">
+        <Navbar.Brand href="/" className="fw-bold" style={{ color: 'green' }}>
           SPA GradeBook
         </Navbar.Brand>
         <Navbar.Toggle className="bg-light" aria-controls="spaGradeBook" />
