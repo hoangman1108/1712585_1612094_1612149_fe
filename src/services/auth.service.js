@@ -27,13 +27,18 @@ const resetPassword = (userID, newPassword) => {
   return axios.post(API_URL + `/auth/reset-password?userId=${userID}`, { newPassword });
 }
 
+const verifyAccount = (userID) => {
+  return axios.post(API_URL + `/auth/verify-account/${userID}?accountId=${userID}`, {});
+}
+
 
 const authService = {
   register,
   login,
   me,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  verifyAccount
 };
 
 export default authService;

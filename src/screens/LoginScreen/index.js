@@ -100,7 +100,7 @@ const LoginScreen = () => {
   return (
     <Container>
       <Row className="mt-5">
-        <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
+        <Col lg={5} md={6} sm={12} className="p-5 m-auto rounded-lg card-shadow">
           <h1 className="text-success fw-bold text-center rounded">Login</h1>
           <Formik
             initialValues={initialLoginValues}

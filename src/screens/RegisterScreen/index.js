@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux";
 import authService from "../../services/auth.service";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Swal from "sweetalert2";
+import nProgress from "nprogress";
 
 const registerSchema = yup.object({
   // username: yup.string().required(),
@@ -43,8 +45,8 @@ const RegisterScreen = (props) => {
             initialValues={initialLoginValues}
             validationSchema={registerSchema}
             onSubmit={(values, actions) => {
-              // nProgress.start();
-              actions.setSubmitting(false);
+              nProgress.start();
+              actions.setSubmitting(true);
               delete values.confirmPassword;
               if (!values.facebook) {
                 delete values.facebook;
@@ -58,10 +60,25 @@ const RegisterScreen = (props) => {
               authService
                 .register(values)
                 .then(() => {
+                  nProgress.done();
+                  actions.setSubmitting(false);
                   dispatch({ type: RESET_INFO_REGISTER });
-                  window.location.href = "/auth/login";
+                  Swal.fire({
+                    position: "center",
+                    icon:"success",
+                    title: "Sign in successfully! Click here to redirect your email process verify account",
+                    showConfirmButton: true,
+                    confirmButtonText: 'Redirect',
+                  }).then((result) => {
+                    if (result.isConfirmed) {
+                      window.open("https://mail.google.com/", "_self");
+                    }
+                  });
+                  
                 })
                 .catch((error) => {
+                  nProgress.done();
+                  actions.setSubmitting(false);
                   const message =
                     (error.response &&
                       error.response.data &&
@@ -186,6 +203,7 @@ const RegisterScreen = (props) => {
                   className="w-100 fw-bolder"
                   variant="outline-success"
                   type="submit"
+                  disabled={props.isSubmitting}
                 >
                   Register
                 </Button>

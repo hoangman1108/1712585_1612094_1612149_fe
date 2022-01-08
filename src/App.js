@@ -20,6 +20,7 @@ import GradeBoardClass from "./screens/GradeBoardClass";
 import { getListClass } from "./redux/actions/class.action";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import ResetPasswordScreen from "./screens/ResetPasswordScreen";
+import VerifyAccountScreen from "./screens/VerifyAccountScreen";
 
 function App() {
 
@@ -47,6 +48,10 @@ function App() {
     {
       path: '/auth/verify/reset-password/:id',
       component: () => <ResetPasswordScreen />
+    },
+    {
+      path: '/auth/verify/account/:id',
+      component: () => <VerifyAccountScreen />
     },
     {
       path: '/',
