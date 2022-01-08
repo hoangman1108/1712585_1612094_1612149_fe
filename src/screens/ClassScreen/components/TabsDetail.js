@@ -1,8 +1,10 @@
 import React from 'react'
-import { Col, Row } from 'react-bootstrap'
+import { Col, Row, Tabs, Tab } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from "react-redux";
 
 export default function TabsDetail() {
+  const { me } = useSelector((state) => state.auth);
   const history = useHistory();
   const currentPath = history.location.pathname.split('/')[3];
   const handleChangePage = (path) => {
@@ -12,27 +14,20 @@ export default function TabsDetail() {
     history.push(history.location.pathname.replace(currentPath, path));
   }
   return (
-    <Row className="bg-success text-center">
-      <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'detail' ? '' : 'bg-non-active'}`}
-        onClick={() => handleChangePage('detail')}
-      >
-        Detail
-      </Col>
-      <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'assignment' ? '' : 'bg-non-active'}`} //bg-non-active
-        onClick={() => handleChangePage('discuss')}
-      >
-        Discuss
-      </Col>
-      <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'grade' ? '' : 'bg-non-active'}`}
-        onClick={() => handleChangePage('grade')}
-      >
-        Grade Structure
-      </Col>
-      <Col className={`text-white fw-bold p-2 fs-5 ${currentPath === 'grade-board' ? '' : 'bg-non-active'}`}
-        onClick={() => handleChangePage('grade-board')}
-      >
-        Grade Board
-      </Col>
-    </Row>
+    <div>
+      <Tabs defaultActiveKey={currentPath} 
+            onSelect={(k) => handleChangePage(k)} 
+            id="uncontrolled-tab-example" 
+            className="my-3"
+        >
+        <Tab eventKey="detail" title="Detail"></Tab>
+        <Tab eventKey="discuss" title="Discuss"></Tab>
+        {
+          me && me?.role === "teacher" ? <Tab eventKey="grade" title="Grade Structure"></Tab> : ""
+        }
+        <Tab eventKey="grade-board" title="Grade Board"></Tab>
+      </Tabs>
+    </div>
+
   )
 }
