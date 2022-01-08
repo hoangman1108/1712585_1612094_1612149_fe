@@ -4,11 +4,43 @@ import { Container, Button, Form, Row, Col } from 'react-bootstrap';
 import { Formik } from 'formik';
 import { useSelector } from 'react-redux';
 import userService from '../../services/user.service';
+import Swal from "sweetalert2";
 
 export default function Management() {
   const { me } = useSelector(state => state.auth);
   const initialValues = Object.assign({}, me);
   const isTeacher = me?.role === "teacher" ? true : false;
+
+  const alertSwal = (status, title) => {
+    Swal.fire({
+      position: "center",
+      icon: status,
+      title: title,
+      showConfirmButton: false,
+      showCloseButton: true
+    });
+  }
+
+  const handleUpdateUser = (dataUpdate, setSubmitting) => {
+    userService.updateUser(me.id, dataUpdate)
+      .then((res) => {
+        setSubmitting(false);
+        nProgress.done();
+        const message = res?.data?.message;
+        if (message === "MSSV_IS_EXISTS") {
+          alertSwal("error", "MSSV existed, please enter other MSSV");
+          return;
+        }
+
+        alertSwal("success", "Update profile successfully");
+      })
+      .catch(() => {
+        setSubmitting(false);
+        nProgress.done();
+        alertSwal("error", "Update profile failed");
+      })
+  }
+
   return (
     <Container>
       <Row className="mt-1">
@@ -43,11 +75,7 @@ export default function Management() {
               if (!isTeacher) {
                 dataUpdate.mssv = values.mssv;
               }
-              setTimeout(() => {
-                userService.updateUser(me.id, dataUpdate);
-                setSubmitting(false);
-                nProgress.done();
-              }, 500);
+              handleUpdateUser(dataUpdate, setSubmitting);
             }}
           >
             {({
