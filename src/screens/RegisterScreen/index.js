@@ -24,7 +24,6 @@ const RegisterScreen = (props) => {
     dob: "",
     role: "student",
     email,
-    mssv: "",
     phone: "",
     google,
     facebook,
@@ -53,9 +52,6 @@ const RegisterScreen = (props) => {
               }
               if (!values.google) {
                 delete values.google;
-              }
-              if (!values.mssv) {
-                delete values.mssv;
               }
               authService
                 .register(values)
@@ -142,21 +138,6 @@ const RegisterScreen = (props) => {
                     value={props.values.email}
                     required={true}
                     name="email"
-                  />
-                </Form.Group>
-                <Form.Group
-                  className="mb-3"
-                  hidden={props.values.role === "student" ? false : true}
-                >
-                  <Form.Label>Mã số</Form.Label>
-                  <Form.Control
-                    className="focus-success"
-                    type="text"
-                    placeholder="Enter your mssv"
-                    onChange={props.handleChange}
-                    onBlur={props.handleBlur}
-                    value={props.values.mssv}
-                    name="mssv"
                   />
                 </Form.Group>
                 <Form.Group className="mb-3">
