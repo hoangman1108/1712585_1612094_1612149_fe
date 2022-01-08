@@ -28,7 +28,10 @@ export default function GradeBoardClass() {
   const { me } = useSelector((state) => state.auth);
   const [callGetAssigment, setCallGetAssigment] = useState(false);
   const [totalGrade, setTotalGrade] = useState(0);
-  const [txtSelectedAssignment, setTxtSelectedAssignment] = useState("----- Select -----");
+  const [txtSelectedAssignment, setTxtSelectedAssignment] =
+    useState("----- Select -----");
+
+  const [markChecked, setMarkChecked] = useState(true);
   const isTeacher = me?.role == "teacher" ? true : false;
 
   const gradeColumns = React.useMemo(
@@ -50,7 +53,7 @@ export default function GradeBoardClass() {
           },
           {
             Header: "Action",
-          }
+          },
         ],
       },
     ],
@@ -69,76 +72,77 @@ export default function GradeBoardClass() {
     setAssignmentId(assignmentIDSelected);
     if (isTeacher) {
       classService
-      .getPointsByAssignmentID(classID, assignmentIDSelected)
-      .then((response) => {
-        const data = response?.data?.points;
-        const totalGradeNew = data.reduce((total, obj) => {
-          return total + (obj.point || 0);
-        }, 0);
-        setTotalGrade(totalGradeNew);
-        setGradeData([...data]);
-      });
+        .getPointsByAssignmentID(classID, assignmentIDSelected)
+        .then((response) => {
+          const data = response?.data?.points;
+          const mark = response?.data?.mark;
+          const totalGradeNew = data.reduce((total, obj) => {
+            return total + (obj.point || 0);
+          }, 0);
+          setMarkChecked(mark);
+          setTotalGrade(totalGradeNew);
+          setGradeData([...data]);
+        });
     } else {
       classService
-      .getStudentPointByAssignmentID(assignmentIDSelected)
-      .then((response) => {
-        const data = response.data;
-        const message = data?.message;
-        if (message) {
-          Swal.fire({
-            position: "center",
-            icon: "error",
-            title: "You don't have a score for this assignment",
-            showConfirmButton: false,
-            showCloseButton: true
-          });
-          setTotalGrade(0);
-          setGradeData([]);
-        } else {
-          setTotalGrade(data.point);
-          setGradeData([{
-            fullName: data.fullName,
-            MSSV: data.MSSV,
-            point: data.point
-          }]);
-        }
-      })
+        .getStudentPointByAssignmentID(assignmentIDSelected)
+        .then((response) => {
+          const data = response.data;
+          const message = data?.message;
+          if (message) {
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: "You don't have a score for this assignment",
+              showConfirmButton: false,
+              showCloseButton: true,
+            });
+            setTotalGrade(0);
+            setGradeData([]);
+          } else {
+            setTotalGrade(data.point);
+            setGradeData([
+              {
+                fullName: data.fullName,
+                MSSV: data.MSSV,
+                point: data.point,
+              },
+            ]);
+          }
+        });
     }
-    
-  }
+  };
 
   async function editPointStudent(student) {
     const { value: point } = await Swal.fire({
-      title: 'Input point',
-      input: 'number',
-      inputLabel: 'Point of student',
-      inputPlaceholder: 'Enter point of student',
+      title: "Input point",
+      input: "number",
+      inputLabel: "Point of student",
+      inputPlaceholder: "Enter point of student",
       showCancelButton: true,
     });
 
     if (point) {
-
       const data = {
         classId: classID,
         MSSV: student.MSSV,
         fullName: student.fullName,
         assignmentId: assignmentId,
-        point: point
-      }
-      classService.updatePointByTeacher(data)
-        .then(response => {
-          const status = response.data?.message === "UPDATED" ? true : false;
-          Swal.fire({
-            position: "center",
-            icon: status ? "success" : "error",
-            title: status
-              ? "Upload point successfully !!!"
-              : "Upload point failed !!!",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          getDataDetailAssignment(assignmentId);
-        })
+        point: point,
+      };
+      classService.updatePointByTeacher(data).then((response) => {
+        const status = response.data?.message === "UPDATED" ? true : false;
+        Swal.fire({
+          position: "center",
+          icon: status ? "success" : "error",
+          title: status
+            ? "Upload point successfully !!!"
+            : "Upload point failed !!!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        getDataDetailAssignment(assignmentId);
+      });
     }
   }
 
@@ -180,20 +184,20 @@ export default function GradeBoardClass() {
 
   useEffect(() => {
     classService.getAssigments(classID).then((response) => {
+      console.log("response ne", response);
       setAssignmentData(response.data);
     });
-    if (assignmentId)
-      getDataDetailAssignment(assignmentId);
-      // classService
-      //   .getPointsByAssignmentID(classID, assignmentId)
-      //   .then((response) => {
-      //     const data = response?.data?.points;
-      //     const totalGradeNew = data.reduce((total, obj) => {
-      //       return total + (obj.point || 0);
-      //     }, 0);
-      //     setTotalGrade(totalGradeNew);
-      //     setGradeData([...data]);
-      //   });
+    if (assignmentId) getDataDetailAssignment(assignmentId);
+    // classService
+    //   .getPointsByAssignmentID(classID, assignmentId)
+    //   .then((response) => {
+    //     const data = response?.data?.points;
+    //     const totalGradeNew = data.reduce((total, obj) => {
+    //       return total + (obj.point || 0);
+    //     }, 0);
+    //     setTotalGrade(totalGradeNew);
+    //     setGradeData([...data]);
+    //   });
   }, [callGetAssigment]);
 
   const data = classes.find((element) => element.id === classID);
@@ -202,6 +206,34 @@ export default function GradeBoardClass() {
   } else {
     nProgress.done();
   }
+
+  const changeMark = () => {
+    setMarkChecked(!markChecked);
+    const data = {
+      mark: true,
+      assignmentId: assignmentId,
+      classId: classID,
+    };
+
+    classService
+      .updateMarkForAssigment({
+        ...data,
+      })
+      .then((response) => {
+        console.log("data res", response);
+        const status =
+          response?.data === "UPDATE_MARK_SUCCESS" ? true : false;
+        Swal.fire({
+          position: "center",
+          icon: status ? "success" : "error",
+          title: status
+            ? "Upload mark successfully !!!"
+            : "Upload mark failed !!!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      });
+  };
 
   const renderOps = () => (
     <div>
@@ -247,7 +279,8 @@ export default function GradeBoardClass() {
                       <Dropdown.Item
                         href="#"
                         key={index}
-                        onClick={onSelectedAssignment.bind(this, assignment)}>
+                        onClick={onSelectedAssignment.bind(this, assignment)}
+                      >
                         {assignment.name}
                       </Dropdown.Item>
                     ))}
@@ -256,6 +289,19 @@ export default function GradeBoardClass() {
               </div>
             </Col>
             <Col className="d-flex justify-content-end">
+              <div style={{ marginRight: 10 }}>
+                {me.role === "teacher" && !markChecked && (
+                  <Button
+                    onClick={changeMark}
+                    variant="success"
+                    style={{ marginLeft: "10px" }}
+                  >
+                    <label>
+                      <span>Mark</span>
+                    </label>
+                  </Button>
+                )}
+              </div>
               <ExportData rows={gradeData}></ExportData>
               {me.role === "teacher" && (
                 <Button variant="success" style={{ marginLeft: "10px" }}>
@@ -281,7 +327,12 @@ export default function GradeBoardClass() {
           </Row>
 
           {gradeData.length > 0 && (
-            <TableGradeBoard columns={gradeColumns} data={gradeData} onEdit={editPointStudent} isTeacher={isTeacher} />
+            <TableGradeBoard
+              columns={gradeColumns}
+              data={gradeData}
+              onEdit={editPointStudent}
+              isTeacher={isTeacher}
+            />
           )}
           <div>
             <label>Total grade: {totalGrade}</label>
