@@ -3,7 +3,7 @@ import { useTable, usePagination } from "react-table";
 import BTable from "react-bootstrap/Table";
 import { BsPencilSquare } from "react-icons/bs";
 
-function TableGradeBoard({ columns, data, onEdit }) {
+function TableGradeBoard({ columns, data, onEdit, isTeacher }) {
   const { getTableProps, getTableBodyProps, headerGroups, prepareRow, page } =
     useTable(
       {
@@ -37,12 +37,10 @@ function TableGradeBoard({ columns, data, onEdit }) {
                   return (
                     <td {...cell.getCellProps()}>
                       {
-                        cell.column.Header === "Action" ? (
-                          <BsPencilSquare
-                            onClick={onEdit.bind(this, cell.row.original)}
-                            style={{ marginLeft: "10px", fontSize: "20px", cursor: 'pointer' }}
-                          />
-                        ) : cell.render("Cell")
+                        cell.column.Header === "Action" && isTeacher ? (<BsPencilSquare
+                        onClick={onEdit.bind(this, cell.row.original)}
+                        style={{ marginLeft: "10px", fontSize: "20px", cursor: 'pointer' }}
+                      />) : cell.render("Cell")
                       }
                     </td>
                   );

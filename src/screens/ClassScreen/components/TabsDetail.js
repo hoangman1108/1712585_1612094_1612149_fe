@@ -22,9 +22,7 @@ export default function TabsDetail() {
         >
         <Tab eventKey="detail" title="Detail"></Tab>
         <Tab eventKey="discuss" title="Discuss"></Tab>
-        {
-          me && me?.role === "teacher" ? <Tab eventKey="grade" title="Grade Structure"></Tab> : ""
-        }
+        <Tab eventKey="grade" title="Grade Structure"></Tab>
         <Tab eventKey="grade-board" title="Grade Board"></Tab>
       </Tabs>
     </div>

@@ -29,6 +29,7 @@ export default function GradeBoardClass() {
   const [callGetAssigment, setCallGetAssigment] = useState(false);
   const [totalGrade, setTotalGrade] = useState(0);
   const [txtSelectedAssignment, setTxtSelectedAssignment] = useState("----- Select -----");
+  const isTeacher = me?.role == "teacher" ? true : false;
 
   const gradeColumns = React.useMemo(
     () => [
@@ -66,7 +67,8 @@ export default function GradeBoardClass() {
 
   const getDataDetailAssignment = (assignmentIDSelected) => {
     setAssignmentId(assignmentIDSelected);
-    classService
+    if (isTeacher) {
+      classService
       .getPointsByAssignmentID(classID, assignmentIDSelected)
       .then((response) => {
         const data = response?.data?.points;
@@ -76,10 +78,36 @@ export default function GradeBoardClass() {
         setTotalGrade(totalGradeNew);
         setGradeData([...data]);
       });
+    } else {
+      classService
+      .getStudentPointByAssignmentID(assignmentIDSelected)
+      .then((response) => {
+        const data = response.data;
+        const message = data?.message;
+        if (message) {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "You don't have a score for this assignment",
+            showConfirmButton: false,
+            showCloseButton: true
+          });
+          setTotalGrade(0);
+          setGradeData([]);
+        } else {
+          setTotalGrade(data.point);
+          setGradeData([{
+            fullName: data.fullName,
+            MSSV: data.MSSV,
+            point: data.point
+          }]);
+        }
+      })
+    }
+    
   }
 
   async function editPointStudent(student) {
-    console.log(student);
     const { value: point } = await Swal.fire({
       title: 'Input point',
       input: 'number',
@@ -155,16 +183,17 @@ export default function GradeBoardClass() {
       setAssignmentData(response.data);
     });
     if (assignmentId)
-      classService
-        .getPointsByAssignmentID(classID, assignmentId)
-        .then((response) => {
-          const data = response?.data?.points;
-          const totalGradeNew = data.reduce((total, obj) => {
-            return total + (obj.point || 0);
-          }, 0);
-          setTotalGrade(totalGradeNew);
-          setGradeData([...data]);
-        });
+      getDataDetailAssignment(assignmentId);
+      // classService
+      //   .getPointsByAssignmentID(classID, assignmentId)
+      //   .then((response) => {
+      //     const data = response?.data?.points;
+      //     const totalGradeNew = data.reduce((total, obj) => {
+      //       return total + (obj.point || 0);
+      //     }, 0);
+      //     setTotalGrade(totalGradeNew);
+      //     setGradeData([...data]);
+      //   });
   }, [callGetAssigment]);
 
   const data = classes.find((element) => element.id === classID);
@@ -202,7 +231,7 @@ export default function GradeBoardClass() {
       {checkInClass === 2 ? (
         <Container>
           <TabsDetail />
-          <h4 className="mt-3">Thông tin bảng điểm của sinh viên</h4>
+          <h4 className="mt-3">Student's grade board information</h4>
           <Row className="my-3">
             <Col>
               <div>
@@ -238,7 +267,7 @@ export default function GradeBoardClass() {
                     hidden
                   />
                   <label
-                    for="import-students"
+                    htmlFor="import-students"
                     className="d-flex align-items-center"
                   >
                     <BsFileEarmarkArrowDownFill
@@ -252,7 +281,7 @@ export default function GradeBoardClass() {
           </Row>
 
           {gradeData.length > 0 && (
-            <TableGradeBoard columns={gradeColumns} data={gradeData} onEdit={editPointStudent} />
+            <TableGradeBoard columns={gradeColumns} data={gradeData} onEdit={editPointStudent} isTeacher={isTeacher} />
           )}
           <div>
             <label>Total grade: {totalGrade}</label>

@@ -96,6 +96,12 @@ const updatePointByTeacher = (formData) => {
   });
 };
 
+const getStudentPointByAssignmentID = (assignmentID) => {
+  return axios.get(API_URL + `/point-assignment/show-point-student/${assignmentID}`, {
+    headers: authHeader(),
+  });
+};
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -113,6 +119,7 @@ const classService = {
   getPointsByAssignmentID,
   importListGrade,
   updatePointByTeacher,
+  getStudentPointByAssignmentID
 };
 
 export default classService;
