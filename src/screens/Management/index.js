@@ -8,12 +8,13 @@ import userService from '../../services/user.service';
 export default function Management() {
   const { me } = useSelector(state => state.auth);
   const initialValues = Object.assign({}, me);
+  const isTeacher = me?.role === "teacher" ? true : false;
   return (
     <Container>
       <Row className="mt-1">
         <Col lg={5} md={6} sm={12} className="p-5 m-auto shadow-sm rounded-lg">
           <h1 className="text-success fw-bold text-center rounded">
-          Profile
+            Profile
           </h1>
 
           <Formik
@@ -23,6 +24,10 @@ export default function Management() {
               if (!values.name) {
                 errors.name = 'Field name is required';
               }
+              if (!isTeacher && values?.mssv && !values.mssv) {
+                errors.mssv = 'Field mssv is required';
+              }
+
               return errors;
             }}
             onSubmit={(values, { setSubmitting }) => {
@@ -33,7 +38,10 @@ export default function Management() {
                 name: values.name,
                 dob: values.dob,
                 role: me.role,
-                phone: values.phone,
+                phone: values.phone
+              }
+              if (!isTeacher) {
+                dataUpdate.mssv = values.mssv;
               }
               setTimeout(() => {
                 userService.updateUser(me.id, dataUpdate);
@@ -85,6 +93,19 @@ export default function Management() {
                     value={values.phone}
                     placeholder="0123456789" />
                 </Form.Group>
+                {
+                  !isTeacher ? (<Form.Group className="mb-3">
+                    <Form.Label>MSSV</Form.Label>
+                    <Form.Control
+                      type="text"
+                      name="mssv"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.mssv}
+                      placeholder="1612001"
+                    />
+                  </Form.Group>) : ""
+                }
                 <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
                   <Form.Control
@@ -111,7 +132,7 @@ export default function Management() {
                     className="text-center"
                     variant="outline-success"
                     type="submit"
-                    disabled={isSubmitting}>Cập nhật
+                    disabled={isSubmitting}>Update
                   </Button>
                 </Form.Group>
               </Form>
