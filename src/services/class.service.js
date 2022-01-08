@@ -97,7 +97,16 @@ const updatePointByTeacher = (formData) => {
 };
 
 const getStudentPointByAssignmentID = (assignmentID) => {
-  return axios.get(API_URL + `/point-assignment/show-point-student/${assignmentID}`, {
+  return axios.get(
+    API_URL + `/point-assignment/show-point-student/${assignmentID}`,
+    {
+      headers: authHeader(),
+    }
+  );
+};
+
+const updateMarkForAssigment = (formData) => {
+  return axios.post(API_URL + `/assignments/mark`, formData, {
     headers: authHeader(),
   });
 };
@@ -119,7 +128,8 @@ const classService = {
   getPointsByAssignmentID,
   importListGrade,
   updatePointByTeacher,
-  getStudentPointByAssignmentID
+  getStudentPointByAssignmentID,
+  updateMarkForAssigment,
 };
 
 export default classService;
