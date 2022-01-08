@@ -11,9 +11,14 @@ const updateUser = (id, data) => {
   return axios.put(API_URL + `/users/${id}`, data, { headers: authHeader() });
 }
 
+const myGrade = () => {
+  return axios.get(API_URL + `/point-assignment/show-point-student-in-profile`, { headers: authHeader() });
+}
+
 const userService = {
   getUserByRole,
-  updateUser
+  updateUser,
+  myGrade
 };
 
 export default userService;
