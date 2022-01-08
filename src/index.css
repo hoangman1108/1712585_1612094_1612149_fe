@@ -3,7 +3,7 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
+  -webkit-font-smoothing : antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
@@ -14,8 +14,12 @@ code {
 
 #nprogress .bar {
   background: rgb(23, 252, 11) !important;
-  }
+}
 
-  .h-img-carousel {
-    height: 93.4vh;
-  }
+.h-img-carousel {
+  height: 93.4vh;
+}
+
+.card-shadow {
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}

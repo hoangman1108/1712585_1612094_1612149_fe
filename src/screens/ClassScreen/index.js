@@ -37,9 +37,9 @@ function ClassScreen() {
       {
         role === 'teacher' && (<Button variant="outline-success"
           onClick={handleShowAddModel}
-          className="mt-5">
+          className="mt-5" style={{ marginLeft: "40px" }}>
           <FontAwesomeIcon icon={faPlusCircle} />{' '}
-          Thêm Lớp
+          Add class
         </Button>)
       }
       <Row>
