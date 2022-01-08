@@ -1,6 +1,6 @@
 import nProgress from "nprogress";
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Dropdown } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useHistory } from "react-router";
 import TabsDetail from "../ClassScreen/components/TabsDetail";
@@ -28,6 +28,7 @@ export default function GradeBoardClass() {
   const { me } = useSelector((state) => state.auth);
   const [callGetAssigment, setCallGetAssigment] = useState(false);
   const [totalGrade, setTotalGrade] = useState(0);
+  const [txtSelectedAssignment, setTxtSelectedAssignment] = useState("----- Select -----");
 
   const gradeColumns = React.useMemo(
     () => [
@@ -54,11 +55,12 @@ export default function GradeBoardClass() {
     ],
     []
   );
-  
-  const onSelectedAssignment = (e) => {
-    const assignmentIDSelected = e.target.value;
+
+  const onSelectedAssignment = (assignment) => {
+    const assignmentIDSelected = assignment.id;
     if (assignmentIDSelected !== "default") {
       getDataDetailAssignment(assignmentIDSelected);
+      setTxtSelectedAssignment(assignment.name);
     }
   };
 
@@ -85,9 +87,9 @@ export default function GradeBoardClass() {
       inputPlaceholder: 'Enter point of student',
       showCancelButton: true,
     });
-    
+
     if (point) {
-      
+
       const data = {
         classId: classID,
         MSSV: student.MSSV,
@@ -96,19 +98,19 @@ export default function GradeBoardClass() {
         point: point
       }
       classService.updatePointByTeacher(data)
-      .then(response => {
-        const status = response.data?.message === "UPDATED" ? true : false;
-        Swal.fire({
-          position: "center",
-          icon: status ? "success" : "error",
-          title: status
-            ? "Upload point successfully !!!"
-            : "Upload point failed !!!",
-          showConfirmButton: false,
-          timer: 1500,
-        });
-        getDataDetailAssignment(assignmentId);
-      })
+        .then(response => {
+          const status = response.data?.message === "UPDATED" ? true : false;
+          Swal.fire({
+            position: "center",
+            icon: status ? "success" : "error",
+            title: status
+              ? "Upload point successfully !!!"
+              : "Upload point failed !!!",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          getDataDetailAssignment(assignmentId);
+        })
     }
   }
 
@@ -203,17 +205,26 @@ export default function GradeBoardClass() {
           <h4 className="mt-3">Thông tin bảng điểm của sinh viên</h4>
           <Row className="my-3">
             <Col>
-              <span>Choose assignment: </span>
-              <select onChange={onSelectedAssignment}>
-                <option value={assignmentId ? assignmentId : "Defaul"}>
-                  --- select ---
-                </option>
-                {assignmentData.map((assignment, index) => (
-                  <option key={index} value={assignment.id}>
-                    {assignment.name}
-                  </option>
-                ))}
-              </select>
+              <div>
+                <Dropdown>
+                  <span>Choose assignment: </span>
+
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    {txtSelectedAssignment}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    {assignmentData.map((assignment, index) => (
+                      <Dropdown.Item
+                        href="#"
+                        key={index}
+                        onClick={onSelectedAssignment.bind(this, assignment)}>
+                        {assignment.name}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
+              </div>
             </Col>
             <Col className="d-flex justify-content-end">
               <ExportData rows={gradeData}></ExportData>
