@@ -1,4 +1,4 @@
-FROM node:14-alpine as build 
+FROM node:14.18.2 as build 
 WORKDIR /app
 COPY package*.json ./
 RUN npm install 
