@@ -51,11 +51,16 @@ export default function ListPost(props) {
                 <Card>
                   {/* <Card.Img variant="top" src="holder.js/100px180" /> */}
                   <Card.Body>
-                    <Card.Text>
-                      <span>1612094: </span>
-                      Some quick example text to build on the card title and
-                      make up the bulk of the card's content.
-                    </Card.Text>
+                    {e.comments.map((o, index) => (
+                      <Card.Text key={index}>
+                        <span style={{ fontWeight: "bold" }}>{o.name} </span>
+                        <span
+                          style={{ color: "gray" }}
+                        >{` (${o.email}): `}</span>
+                        {o.comment}
+                      </Card.Text>
+                    ))}
+
                     {/* <Button variant="primary">Go somewhere</Button> */}
                   </Card.Body>
                 </Card>
