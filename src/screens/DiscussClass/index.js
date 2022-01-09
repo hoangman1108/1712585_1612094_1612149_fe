@@ -11,8 +11,10 @@ import classService from "../../services/class.service";
 
 export default function DiscussClass() {
   const { me } = useSelector((state) => state.auth);
+  console.log("me ne", me);
   const history = useHistory();
   const [showForm, setShowForm] = useState(false);
+  const [reloadList, setReloadList] = useState(true);
   const [assignmentData, setAssignmentData] = useState([]);
   const classID = history.location.pathname.split("/")[2];
   const initialLoginValues = {
@@ -29,7 +31,6 @@ export default function DiscussClass() {
 
   useEffect(() => {
     classService.getAssigments(classID).then((response) => {
-      console.log("response ne", response.data);
       setAssignmentData(response.data);
     });
   }, []);
@@ -51,7 +52,12 @@ export default function DiscussClass() {
       <TabsDetail />
       <Col>
         {" "}
-        <Button onClick={createForm}>Create Post</Button>{" "}
+        <Button
+          style={{ display: `${me.role === "teacher" ? "none" : ""}` }}
+          onClick={createForm}
+        >
+          Create Post
+        </Button>{" "}
       </Col>
       <Modal show={showForm}>
         <Modal.Header>
@@ -65,8 +71,11 @@ export default function DiscussClass() {
             onSubmit={(values, actions) => {
               nProgress.start();
               actions.setSubmitting(false);
-              // console.log("value ne", values);
-              classService.createGradeView({ ...values });
+              classService.createGradeView({ ...values }).then(() => {
+                nProgress.done();
+                closeForm();
+                setReloadList(!reloadList);
+              });
             }}
           >
             {(props) => (
@@ -176,7 +185,7 @@ export default function DiscussClass() {
 
         <Modal.Footer></Modal.Footer>
       </Modal>
-      <ListPost me={me} />
+      <ListPost reloadList={reloadList} me={me} />
     </Container>
   );
 }

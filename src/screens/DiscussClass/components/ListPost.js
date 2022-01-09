@@ -5,23 +5,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileContract } from "@fortawesome/free-solid-svg-icons";
 import classService from "../../../services/class.service";
 export default function ListPost(props) {
-  const { me } = props;
+  const { reloadList, me } = props;
+
   const history = useHistory();
   const { name, role, id } = me;
   const classID = history.location.pathname.split("/")[2];
   const [posts, setPosts] = useState([]);
 
-  useEffect(async () => {
-    try {
-      const res = await classService.getGradeView(classID);
+  useEffect(() => {
+    classService.getGradeView(classID).then((res) => {
       const data = res?.data;
       console.log("data ne", data);
 
       setPosts(data);
-    } catch (error) {
-      console.error(error);
-    }
-  }, []);
+    });
+  }, [reloadList]);
 
   return (
     <Row className="mt-5">

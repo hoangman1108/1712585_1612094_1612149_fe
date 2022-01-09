@@ -184,7 +184,6 @@ export default function GradeBoardClass() {
 
   useEffect(() => {
     classService.getAssigments(classID).then((response) => {
-      console.log("response ne", response);
       setAssignmentData(response.data);
     });
     if (assignmentId) getDataDetailAssignment(assignmentId);
@@ -221,8 +220,7 @@ export default function GradeBoardClass() {
       })
       .then((response) => {
         console.log("data res", response);
-        const status =
-          response?.data === "UPDATE_MARK_SUCCESS" ? true : false;
+        const status = response?.data === "UPDATE_MARK_SUCCESS" ? true : false;
         Swal.fire({
           position: "center",
           icon: status ? "success" : "error",
