@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { Accordion, Col, Card, Form, Button, Row } from "react-bootstrap";
+import { Formik } from "formik";
+import nProgress from "nprogress";
+import * as yup from "yup";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileContract } from "@fortawesome/free-solid-svg-icons";
 import classService from "../../../services/class.service";
@@ -8,9 +11,21 @@ export default function ListPost(props) {
   const { reloadList, me } = props;
 
   const history = useHistory();
-  const { name, role, id } = me;
+  const { name, role, id, email } = me;
   const classID = history.location.pathname.split("/")[2];
   const [posts, setPosts] = useState([]);
+  const [gradeViewId, setGradeViewId] = useState("");
+  const [reloadListComment, setReloadListComment] = useState(true);
+
+  const initialLoginValues = {
+    name: name,
+    email: email,
+    role: role,
+    comment: "",
+  };
+  const loginSchema = yup.object({
+    comment: yup.string().min(1).required(),
+  });
 
   useEffect(() => {
     classService.getGradeView(classID).then((res) => {
@@ -19,7 +34,7 @@ export default function ListPost(props) {
 
       setPosts(data);
     });
-  }, [reloadList]);
+  }, [reloadList,reloadListComment]);
 
   return (
     <Row className="mt-5">
@@ -63,17 +78,64 @@ export default function ListPost(props) {
                   </Card.Body>
                 </Card>
                 <br />
+                <Formik
+                  initialValues={initialLoginValues}
+                  validationSchema={loginSchema}
+                  onSubmit={(values, actions) => {
+                    nProgress.start();
+                    actions.setSubmitting(false);
+                    classService
+                      .createCommentInPost(gradeViewId, { ...values })
+                      .then(() => {
+                        setReloadListComment(!reloadListComment);
+                        nProgress.done();
+                        // closeForm();
+                        // setReloadList(!reloadList);
+                      });
+                  }}
+                >
+                  {(props) => (
+                    <Form onSubmit={props.handleSubmit}>
+                      <Form.Group className="mb-3" controlId="formBasicEmail">
+                        <Form.Label>Your comment</Form.Label>
+                        <Form.Control
+                          className="focus-success"
+                          type="text"
+                          placeholder="new comment"
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          value={props.values.comment}
+                          name="comment"
+                        />
 
-                <Form>
-                  <Form.Group className="mb-3" controlId="formBasicEmail">
-                    <Form.Label>Your comment</Form.Label>
-                    <Form.Control type="text" placeholder="new comment" />
-                  </Form.Group>
+                        {props.errors.comment && (
+                          <Form.Text className="text-danger">
+                            {props.errors.comment}
+                          </Form.Text>
+                        )}
+                      </Form.Group>
+                      <Form.Group style={{ display: "none" }}>
+                        <Form.Control
+                          type="text"
+                          value={e.id}
+                          onChange={props.handleChange}
+                          onBlur={props.handleBlur}
+                          name="gradeViewId"
+                        />
+                      </Form.Group>
 
-                  <Button variant="primary" type="submit">
-                    Create comment
-                  </Button>
-                </Form>
+                      <Button
+                        onClick={() => {
+                          setGradeViewId(e.id);
+                        }}
+                        variant="primary"
+                        type="submit"
+                      >
+                        Create comment
+                      </Button>
+                    </Form>
+                  )}
+                </Formik>
               </Accordion.Body>
             </Accordion.Item>
           ))}

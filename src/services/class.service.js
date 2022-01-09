@@ -123,6 +123,12 @@ const createGradeView = (formData) => {
   });
 };
 
+const createCommentInPost = (gradeViewId, formData) => {
+  return axios.post(API_URL + `/grade-view/comment/${gradeViewId}`, formData, {
+    headers: authHeader(),
+  });
+};
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -143,7 +149,8 @@ const classService = {
   getStudentPointByAssignmentID,
   updateMarkForAssigment,
   getGradeView,
-  createGradeView
+  createGradeView,
+  createCommentInPost,
 };
 
 export default classService;
