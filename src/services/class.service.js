@@ -111,6 +111,12 @@ const updateMarkForAssigment = (formData) => {
   });
 };
 
+const getGradeView = (classID) => {
+  return axios.get(API_URL + `/grade-view/${classID}/class`, {
+    headers: authHeader(),
+  });
+};
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -130,6 +136,7 @@ const classService = {
   updatePointByTeacher,
   getStudentPointByAssignmentID,
   updateMarkForAssigment,
+  getGradeView
 };
 
 export default classService;
