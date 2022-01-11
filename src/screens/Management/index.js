@@ -13,7 +13,7 @@ export default function Management() {
   const isTeacher = me?.role === "teacher" ? true : false;
   const [tabSelected, setTabSelected] = useState("profile");
   const [grades, setGrades] = useState([]);
-
+  
   const gradeColumns = React.useMemo(
     () => [
       {
@@ -42,7 +42,7 @@ export default function Management() {
       .then((res) => {
         const data = res?.data;
         if (data.length > 0) {
-          if (data.length > 1) 
+          if (data.length > 1)
             data.sort((a, b) => b.point - a.point);
           handleDataGrades(data);
         } else {
@@ -225,15 +225,19 @@ export default function Management() {
             </Col>
           </Row>
         </Tab>
-        <Tab eventKey="grade" title="My Grade">
-          {
-            grades.length > 0 ? (
-              <TableGradeBoard columns={gradeColumns} data={grades} onEdit={() => {}} isTeacher={isTeacher} />
-            ) : (
-              <p>Hello world</p>
-            )
-          }
-        </Tab>
+        {
+          !isTeacher ? (
+            <Tab eventKey="grade" title="My Grade">
+              {
+                grades.length > 0 ? (
+                  <TableGradeBoard columns={gradeColumns} data={grades} onEdit={() => { }} isTeacher={isTeacher} />
+                ) : (
+                  <p>The student has no score !!!</p>
+                )
+              }
+            </Tab>
+          ) : ""
+        }
       </Tabs>
 
     </Container>
