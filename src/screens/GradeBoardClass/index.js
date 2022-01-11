@@ -261,7 +261,7 @@ export default function GradeBoardClass() {
       {checkInClass === 2 ? (
         <Container>
           <TabsDetail />
-          <h4 className="mt-3">Student's grade board information</h4>
+          <h4 className="mt-3">Grade board information</h4>
           <Row className="my-3">
             <Col>
               <div>
