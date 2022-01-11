@@ -30,7 +30,6 @@ const RegisterScreen = (props) => {
     password,
     confirmPassword: "",
   };
-
   return (
     <Container>
       <ToastContainer />
@@ -59,18 +58,22 @@ const RegisterScreen = (props) => {
                   nProgress.done();
                   actions.setSubmitting(false);
                   dispatch({ type: RESET_INFO_REGISTER });
-                  Swal.fire({
-                    position: "center",
-                    icon:"success",
-                    title: "Sign in successfully! Click here to redirect your email process verify account",
-                    showConfirmButton: true,
-                    confirmButtonText: 'Redirect',
-                  }).then((result) => {
-                    if (result.isConfirmed) {
-                      window.open("https://mail.google.com/", "_self");
-                    }
-                  });
-                  
+
+                  if (google || facebook) {
+                    window.open("/auth/login", "_self");
+                  } else {
+                    Swal.fire({
+                      position: "center",
+                      icon:"success",
+                      title: "Sign in successfully! Click here to redirect your email process verify account",
+                      showConfirmButton: true,
+                      confirmButtonText: 'Redirect',
+                    }).then((result) => {
+                      if (result.isConfirmed) {
+                        window.open("https://mail.google.com/", "_self");
+                      }
+                    });
+                  }
                 })
                 .catch((error) => {
                   nProgress.done();
