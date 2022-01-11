@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Container, Col, Button, Modal, Form } from "react-bootstrap";
 import nProgress from "nprogress";
 import { useHistory } from "react-router";
+import Swal from "sweetalert2";
 import * as yup from "yup";
 import { Formik } from "formik";
 import { useSelector } from "react-redux";
@@ -21,7 +22,7 @@ export default function DiscussClass() {
     classId: classID,
     studentId: me?.id,
     Mssv: "",
-    composition: "",
+    composition: assignmentData[0]?.id,
     current: 0,
     expect: 0,
     explanation: "",
@@ -30,14 +31,13 @@ export default function DiscussClass() {
   };
 
   useEffect(() => {
-    classService.getAssigments(classID).then((response) => {
+    classService.getAssigmentsMarkDone(classID).then((response) => {
       setAssignmentData(response.data);
     });
   }, []);
 
   const loginSchema = yup.object({
     Mssv: yup.string().required(),
-    composition: yup.string().required(),
     explanation: yup.string().required(),
   });
 
@@ -53,7 +53,8 @@ export default function DiscussClass() {
       <Col>
         {" "}
         <Button
-          style={{ display: `${me.role === "teacher" ? "none" : ""}` }}
+          className={`btn btn-success`}
+          style={{ display: `${me.role === "teacher" ? "none" : "block"}` }}
           onClick={createForm}
         >
           Create Post
@@ -71,10 +72,28 @@ export default function DiscussClass() {
             onSubmit={(values, actions) => {
               nProgress.start();
               actions.setSubmitting(false);
-              classService.createGradeView({ ...values }).then(() => {
+              classService.createGradeView({ ...values }).then((res) => {
                 nProgress.done();
                 closeForm();
                 setReloadList(!reloadList);
+                console.log("res", res);
+                const {
+                  data: { message },
+                } = res;
+                const status =
+                  message ===
+                  "NOT_FOUND_POINT_ASSIGNMENT_FOR_MSSV_OR_MSSV_NOT_MATCH"
+                    ? false
+                    : true;
+                Swal.fire({
+                  position: "center",
+                  icon: status ? "success" : "error",
+                  title: status
+                    ? "Create post successfully !!!"
+                    : "Create post failed !!!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                });
               });
             }}
           >
@@ -114,11 +133,11 @@ export default function DiscussClass() {
                       </option>
                     ))}
                   </Form.Control>
-                  {props.errors.composition && (
+                  {/* {props.errors.composition && (
                     <Form.Text className="text-danger">
                       {props.errors.composition}
                     </Form.Text>
-                  )}
+                  )} */}
                 </Form.Group>
                 <Form.Group className="mb-3" controlId="formBasicEmail3">
                   <Form.Label>Current grade</Form.Label>
@@ -175,7 +194,11 @@ export default function DiscussClass() {
                 <Button variant="secondary" onClick={closeForm}>
                   Close
                 </Button>
-                <Button type="submit" variant="primary">
+                <Button
+                  style={{ marginLeft: 10 }}
+                  type="submit"
+                  className={`btn btn-success`}
+                >
                   Create Post
                 </Button>
               </Form>

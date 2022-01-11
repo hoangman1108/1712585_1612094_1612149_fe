@@ -36,6 +36,12 @@ const getAssigments = (classId) => {
   });
 };
 
+const getAssigmentsMarkDone = (classId) => {
+  return axios.get(API_URL + `/assignments/mark-done/${classId}`, {
+    headers: authHeader(),
+  });
+};
+
 const updateIndexAssigments = (classId, data) => {
   return axios.patch(API_URL + `/classes/${classId}/assignments`, data, {
     headers: authHeader(),
@@ -129,6 +135,12 @@ const createCommentInPost = (gradeViewId, formData) => {
   });
 };
 
+const updateMark = (formData) => {
+  return axios.post(API_URL + `/grade-view/update-mark`, formData, {
+    headers: authHeader(),
+  });
+};
+
 const classService = {
   getAllClass,
   deleteClass,
@@ -151,6 +163,8 @@ const classService = {
   getGradeView,
   createGradeView,
   createCommentInPost,
+  updateMark,
+  getAssigmentsMarkDone,
 };
 
 export default classService;

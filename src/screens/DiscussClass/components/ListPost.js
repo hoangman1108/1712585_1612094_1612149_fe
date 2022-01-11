@@ -4,6 +4,7 @@ import { Accordion, Col, Card, Form, Button, Row } from "react-bootstrap";
 import { Formik } from "formik";
 import nProgress from "nprogress";
 import * as yup from "yup";
+import Swal from "sweetalert2";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFileContract } from "@fortawesome/free-solid-svg-icons";
 import classService from "../../../services/class.service";
@@ -30,21 +31,39 @@ export default function ListPost(props) {
   useEffect(() => {
     classService.getGradeView(classID).then((res) => {
       const data = res?.data;
-      console.log("data ne", data);
-
       setPosts(data);
     });
-  }, [reloadList,reloadListComment]);
+  }, [reloadList, reloadListComment]);
+  const updateMark = (gradeViewId) => {
+    const body = { gradeViewId: gradeViewId, mark: "accept" };
+    classService.updateMark({ ...body }).then((res) => {
+      setReloadListComment(!reloadListComment);
+      const {
+        data: { message }
+      } = res;
+      const status = message === "UPDATE_MARK_SUCCESS" ? true : false;
+
+      Swal.fire({
+        position: "center",
+        icon: status ? "success" : "error",
+        title: status
+          ? "Update mark successfully !!!"
+          : "Update mark failed !!!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
+    });
+  };
 
   return (
     <Row className="mt-5">
       <Col sm={{ span: 8, offset: 2 }}>
-        <Accordion>
-          {posts.map((e, index) => (
+        {posts.map((e, index) => (
+          <Accordion>
             <Accordion.Item key={index} eventKey="0" className="mt-3">
               <Accordion.Header>
                 <FontAwesomeIcon icon={faFileContract} />
-                <span className="ps-3">{`${e.composition.name} - ${e.Mssv} `}</span>
+                <span className="ps-3">{`${e.composition.name} - ${e.Mssv} (${e.mark})`}</span>
               </Accordion.Header>
               <Accordion.Body className="shadow rounded">
                 <Card>
@@ -55,6 +74,18 @@ export default function ListPost(props) {
                       <div>{`Current grade: ${e.current}`}</div>
                       <div>{`Expect grade: ${e.expect}`}</div>
                       <div>{`Explanation: ${e.explanation}`}</div>
+                      <br />
+                      {e.mark === "processing" && role === "teacher" && (
+                        <Button
+                          onClick={() => {
+                            updateMark(e.id);
+                          }}
+                          type="submit"
+                          className={`btn btn-success`}
+                        >
+                          Mark
+                        </Button>
+                      )}
                     </Card.Text>
                     {/* <Button variant="primary">Go somewhere</Button> */}
                   </Card.Body>
@@ -87,10 +118,9 @@ export default function ListPost(props) {
                     classService
                       .createCommentInPost(gradeViewId, { ...values })
                       .then(() => {
+                        values.comment = "";
                         setReloadListComment(!reloadListComment);
                         nProgress.done();
-                        // closeForm();
-                        // setReloadList(!reloadList);
                       });
                   }}
                 >
@@ -128,7 +158,7 @@ export default function ListPost(props) {
                         onClick={() => {
                           setGradeViewId(e.id);
                         }}
-                        variant="primary"
+                        className={`btn btn-success`}
                         type="submit"
                       >
                         Create comment
@@ -138,8 +168,8 @@ export default function ListPost(props) {
                 </Formik>
               </Accordion.Body>
             </Accordion.Item>
-          ))}
-        </Accordion>
+          </Accordion>
+        ))}
       </Col>
     </Row>
   );
